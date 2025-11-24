@@ -1,3 +1,4 @@
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/alvaro-alencar/legendre-e-oppermann/blob/main/Analise_Primos_Legendre.ipynb)
 # 🧪 Math Lab: Validação Numérica de Conjecturas de Primos
 
 Este projeto é um laboratório computacional desenvolvido para testar a robustez de conjecturas clássicas da Teoria dos Números utilizando Python de alta performance.
