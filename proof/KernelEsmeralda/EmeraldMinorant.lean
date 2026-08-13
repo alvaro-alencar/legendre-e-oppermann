@@ -91,5 +91,36 @@ theorem exists_emerald_minorant_between_square_logs
     linarith
   exact exists_smooth_emerald_minorant hleft hright
 
+/-- Normalização real do teste para a fórmula explícita: `k(u)=e^(u/2)K(u)`. -/
+def emeraldTilt (K : Real → Real) (u : Real) : Real :=
+  Real.exp (u / 2) * K u
+
+/-- Em `u = log m`, a inclinação exponencial é exatamente `sqrt m`. -/
+theorem emeraldTilt_log_eq_sqrt_mul
+    (K : Real → Real) (m : Nat) (hm : 0 < m) :
+    emeraldTilt K (Real.log (m : Real)) =
+      Real.sqrt (m : Real) * K (Real.log (m : Real)) := by
+  unfold emeraldTilt
+  have hmR : (0 : Real) < m := by
+    exact_mod_cast hm
+  have hexp : Real.exp (Real.log (m : Real) / 2) = Real.sqrt (m : Real) := by
+    rw [Real.sqrt_eq_rpow, Real.rpow_def_of_pos hmR]
+    congr 1
+    ring
+  rw [hexp]
+
+/-- O `e^(u/2)` cancela exatamente o `1/sqrt m` do lado primo de Weil. -/
+theorem weil_prime_factor_normalization
+    (K : Real → Real) (m : Nat) (hm : 0 < m) :
+    (ArithmeticFunction.vonMangoldt m / Real.sqrt (m : Real)) *
+        emeraldTilt K (Real.log (m : Real)) =
+      ArithmeticFunction.vonMangoldt m * K (Real.log (m : Real)) := by
+  rw [emeraldTilt_log_eq_sqrt_mul K m hm]
+  have hsqrt : Real.sqrt (m : Real) ≠ 0 := by
+    have hmR : (0 : Real) < m := by
+      exact_mod_cast hm
+    exact (Real.sqrt_pos.2 hmR).ne'
+  field_simp [hsqrt]
+
 end
 end KernelEsmeralda
