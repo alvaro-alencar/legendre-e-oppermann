@@ -1,1 +1,2 @@
 import KernelEsmeralda.Detection
+import KernelEsmeralda.ChebyshevBridge
