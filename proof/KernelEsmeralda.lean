@@ -6,3 +6,4 @@ import KernelEsmeralda.PrimePowerWindow
 import KernelEsmeralda.PrimePowerWindowSqrt
 import KernelEsmeralda.EmeraldMinorant
 import KernelEsmeralda.WeilInterface
+import KernelEsmeralda.WeilPrimeBridge
