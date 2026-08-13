@@ -22,5 +22,4 @@ jobs:
           test: false
           lint: false
           use-mathlib-cache: true
-          nanoda: true
-          nanoda-allow-sorry: false
+          nanoda: false
