@@ -1,6 +1,8 @@
 import Mathlib.Analysis.Complex.Basic
 import KernelEsmeralda.EmeraldMinorant
 
+open scoped ContDiff
+
 namespace KernelEsmeralda
 
 noncomputable section
