@@ -1,30 +1,43 @@
 # Kernel de Esmeralda em Lean
 
-Esta pasta separa a camada formal da camada experimental do repositório. O objetivo é transformar a tentativa sobre a Conjectura de Legendre em uma cadeia de lemas auditáveis, deixando explícito onde termina o que já foi provado e onde começa o gargalo analítico.
+Esta pasta transforma a tentativa sobre a Conjectura de Legendre em uma cadeia de lemas auditáveis. O CI instala Lean/Lake e executa `lake build` no pull request.
 
-## Estado atual
+## Estado formal atual
 
-A formalização usa diretamente as definições de `Chebyshev.psi` e `Chebyshev.theta` da Mathlib. O CI instala Lean/Lake e executa `lake build` a cada pull request para `main`.
+A formalização usa `Chebyshev.psi`, `Chebyshev.theta` e a função de von Mangoldt da Mathlib. Já estão kernel-checked:
 
-Módulos compilados:
+- `Δψ = Δθ + Δ(ψ-θ)`;
+- `Δθ > 0` implica um primo estritamente entre `n²` e `(n+1)²`;
+- `Δψ(n)` é exatamente a soma de von Mangoldt em `(n²,(n+1)²]`;
+- `ψ(n+1)-ψ(n)=Λ(n+1)≤log(n+1)`;
+- as desigualdades de Costa–Pereira dão uma cota local explícita para a contribuição das potências superiores;
+- para um peso `K≤1`, a massa ponderada `emeraldMass(K,n)` satisfaz `emeraldMass(K,n)≤Δψ(n)`;
+- existe um minorante `C∞`, entre `0` e `1`, suportado estritamente em `(log n², log (n+1)²)`;
+- com `k(u)=exp(u/2)K(u)`, o fator `1/√m` do lado primo de Weil cancela exatamente;
+- o teste complexo resultante é `C²` e de suporte compacto;
+- o ramo refletido `k(-log m)` é zero e a soma prima infinita inteira na normalização de Weil reduz-se exatamente a `emeraldMass`.
 
-- `KernelEsmeralda/DetectionCore.lean`: detecção elementar a partir de massa logarítmica positiva de primos;
-- `KernelEsmeralda/ChebyshevBridge.lean`: define `Δψ`, `Δθ` e `ψ-θ`, e prova a identidade exata `Δψ = Δθ + Δ(ψ-θ)`;
-- `KernelEsmeralda/PrimeFromThetaCore.lean`: prova que `Δθ > 0` implica a existência de um primo estritamente entre `n²` e `(n+1)²`;
-- `KernelEsmeralda/LegendreCriterion.lean`: transforma dominância de `Δψ` sobre a contribuição das potências superiores em um critério suficiente para Legendre.
+## Barreira explícita
 
-Em particular, a formalização já elimina um erro lógico importante: **`Δψ > 0` sozinho não basta**, porque `ψ` também conta potências de primos.
+Definimos
 
-## Próximo gargalo
+```text
+B(n) = log(n+1)
+     + (log 4 + 4) * ((n+1)²)^(1/3)
+     + (log 4 + 4) * ((n+1)²)^(1/5).
+```
 
-A próxima etapa é localizar a contribuição de `ψ-θ` dentro da própria janela quadrática. A cota global da Mathlib,
+O Lean verifica `Δ(ψ-θ)(n) ≤ B(n)` e, consequentemente,
 
-`ψ(x) - θ(x) = O(√x)`, 
+```text
+B(n) < emeraldMass(K,n)
+    ⇒ existe primo p com n² < p < (n+1)².
+```
 
-é rigorosa mas grosseira demais para um intervalo de comprimento `2n+1`. O alvo agora é uma cota local para
+## Gargalo atual
 
-`[ψ((n+1)²)-θ((n+1)²)] - [ψ(n²)-θ(n²)]`.
+A camada aritmética e o lado primo estão isolados. O passo difícil restante é aplicar uma fórmula explícita de Weil ao teste esmeralda e controlar rigorosamente o lado espectral/arquimediano para obter uma cota inferior que force `emeraldMass(K,n) > B(n)`.
 
-Depois disso, o problema realmente difícil fica isolado: obter uma cota inferior suficientemente forte para `Δψ`, o ponto em que entram a fórmula explícita, os zeros da zeta e a proposta do Kernel de Esmeralda.
+A infraestrutura pública de `zeta-23-lean` contém uma fórmula explícita de Weil para a zeta e usa a mesma revisão da Mathlib, mas ainda não foi incorporada como dependência deste pacote.
 
-Nada nesta pasta, no estado atual, afirma que a Conjectura de Legendre foi provada.
+Nada nesta pasta afirma que a Conjectura de Legendre foi provada.
