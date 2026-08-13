@@ -61,5 +61,20 @@ theorem emeraldMass_eq_spectralBalance_re
   simpa using congrArg Complex.re
     (emeraldMass_eq_spectralBalance K n hn hsupp zeroSum hEF)
 
+theorem legendre_of_spectralBalance_gt_barrier
+    (K : Real → Real) (n : Nat) (hn : 2 ≤ n)
+    (hK : ∀ u : Real, K u ≤ 1)
+    (hsupp : Function.support K ⊆ Ioo (emeraldLogLeft n) (emeraldLogRight n))
+    (zeroSum : Complex)
+    (hEF : EmeraldExplicitBalance K zeroSum)
+    (hbound : emeraldBarrier n <
+      (emeraldPoleTerm K + emeraldGammaTerm K - zeroSum).re) :
+    ∃ p : Nat, Nat.Prime p ∧ n ^ 2 < p ∧ p < (n + 1) ^ 2 := by
+  have hre := emeraldMass_eq_spectralBalance_re K n hn hsupp zeroSum hEF
+  have hmass : emeraldBarrier n < emeraldMass K n := by
+    rwa [hre]
+  apply legendre_of_emeraldMass_gt_explicit_roots K hK n
+  simpa [emeraldBarrier] using hmass
+
 end
 end KernelEsmeralda
