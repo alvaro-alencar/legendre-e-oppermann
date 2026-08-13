@@ -15,5 +15,11 @@ theorem emeraldWeilTest_contDiff_two
   change ContDiff Real 2 (fun u : Real => Complex.ofRealCLM (emeraldTilt K u))
   exact ht.continuousLinearMap_comp Complex.ofRealCLM
 
+theorem emeraldWeilTest_hasCompactSupport
+    (K : Real → Real) (hK : HasCompactSupport K) :
+    HasCompactSupport (emeraldWeilTest K) := by
+  change HasCompactSupport (Complex.ofReal ∘ emeraldTilt K)
+  exact (emeraldTilt_hasCompactSupport K hK).comp_left (by simp)
+
 end
 end KernelEsmeralda
