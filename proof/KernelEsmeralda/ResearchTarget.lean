@@ -20,5 +20,18 @@ def EmeraldWindowWeight (n : Nat) (K : Real → Real) : Prop :=
 def emeraldPaperFT (K : Real → Real) (z : Complex) : Complex :=
   ∫ u : Real, emeraldWeilTest K u * Complex.exp (Complex.I * z * (u : Complex))
 
+def emeraldGammaBracket (r : Real) : Real :=
+  (Complex.digamma (1 / 4 + Complex.I * r / 2)).re - Real.log Real.pi
+
+def emeraldPoleTerm (K : Real → Real) : Complex :=
+  emeraldPaperFT K (Complex.I / 2) + emeraldPaperFT K (-Complex.I / 2)
+
+def emeraldGammaTerm (K : Real → Real) : Complex :=
+  (1 / (2 * Real.pi) : Complex) *
+    ∫ r : Real, emeraldPaperFT K r * (emeraldGammaBracket r : Complex)
+
+def EmeraldExplicitBalance (K : Real → Real) (zeroSum : Complex) : Prop :=
+  zeroSum = emeraldPoleTerm K - emeraldWeilPrimeSide K + emeraldGammaTerm K
+
 end
 end KernelEsmeralda
