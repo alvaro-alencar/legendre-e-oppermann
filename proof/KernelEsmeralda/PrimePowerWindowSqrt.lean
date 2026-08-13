@@ -1,4 +1,5 @@
 import KernelEsmeralda.PrimePowerWindow
+import KernelEsmeralda.LegendreCriterion
 
 open scoped BigOperators
 
@@ -57,6 +58,17 @@ theorem remainderDelta_le_explicit_roots (n : Nat) :
   have h5 := Chebyshev.psi_le_const_mul_self
     (x := upperSquare n ^ (1 / (5 : Real))) (Real.rpow_nonneg hu _)
   linarith [remainderDelta_le_log_add_roots n, h3, h5]
+
+theorem legendre_of_deltaPsi_gt_explicit_roots
+    (n : Nat)
+    (hdom :
+      Real.log (((n + 1 : Nat) : Real)) +
+          (Real.log 4 + 4) * (upperSquare n ^ (1 / (3 : Real))) +
+          (Real.log 4 + 4) * (upperSquare n ^ (1 / (5 : Real))) <
+        deltaPsi n) :
+    ∃ p : Nat, Nat.Prime p ∧ n ^ 2 < p ∧ p < (n + 1) ^ 2 := by
+  apply legendre_of_deltaPsi_gt_remainderDelta n
+  exact lt_of_le_of_lt (remainderDelta_le_explicit_roots n) hdom
 
 end
 end KernelEsmeralda
