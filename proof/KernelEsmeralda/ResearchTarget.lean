@@ -52,5 +52,14 @@ theorem emeraldMass_eq_spectralBalance
   rw [emeraldWeilPrimeSide_eq_emeraldMass K n hn hsupp] at hside
   exact hside
 
+theorem emeraldMass_eq_spectralBalance_re
+    (K : Real → Real) (n : Nat) (hn : 2 ≤ n)
+    (hsupp : Function.support K ⊆ Ioo (emeraldLogLeft n) (emeraldLogRight n))
+    (zeroSum : Complex) (hEF : EmeraldExplicitBalance K zeroSum) :
+    emeraldMass K n =
+      (emeraldPoleTerm K + emeraldGammaTerm K - zeroSum).re := by
+  simpa using congrArg Complex.re
+    (emeraldMass_eq_spectralBalance K n hn hsupp zeroSum hEF)
+
 end
 end KernelEsmeralda
