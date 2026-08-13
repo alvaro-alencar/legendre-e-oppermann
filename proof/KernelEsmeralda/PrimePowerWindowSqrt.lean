@@ -49,10 +49,12 @@ theorem remainderDelta_le_explicit_roots (n : Nat) :
       Real.log (((n + 1 : Nat) : Real)) +
       (Real.log 4 + 4) * (upperSquare n ^ (1 / (3 : Real))) +
       (Real.log 4 + 4) * (upperSquare n ^ (1 / (5 : Real))) := by
+  have hu : 0 ≤ upperSquare n := by
+    simp [upperSquare]
   have h3 := Chebyshev.psi_le_const_mul_self
-    (x := upperSquare n ^ (1 / (3 : Real))) (by positivity)
+    (x := upperSquare n ^ (1 / (3 : Real))) (Real.rpow_nonneg hu _)
   have h5 := Chebyshev.psi_le_const_mul_self
-    (x := upperSquare n ^ (1 / (5 : Real))) (by positivity)
+    (x := upperSquare n ^ (1 / (5 : Real))) (Real.rpow_nonneg hu _)
   linarith [remainderDelta_le_log_add_roots n, h3, h5]
 
 end
