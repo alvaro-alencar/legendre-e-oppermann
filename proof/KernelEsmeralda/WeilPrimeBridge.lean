@@ -84,9 +84,11 @@ theorem mem_square_window_of_emerald_log_ne_zero
   have hupos : 0 < upperSquare n := hlpos.trans hsquares
   have hleftlog : 0 < emeraldLogLeft n := by
     unfold emeraldLogLeft
-    exact Real.log_pos (by
-      unfold lowerSquare
-      nlinarith [sq_nonneg ((n : Real) - 1)])
+    apply Real.log_pos
+    unfold lowerSquare
+    have hnat : 1 < n ^ 2 := by
+      exact lt_of_lt_of_le (by norm_num : 1 < 2 ^ 2) (Nat.pow_le_pow_left hn 2)
+    exact_mod_cast hnat
   have hlogpos : 0 < Real.log (m : Real) := hleftlog.trans hi.1
   have hmgt1 : (1 : Real) < m :=
     (Real.log_pos_iff (Nat.cast_nonneg m)).1 hlogpos
@@ -100,7 +102,9 @@ theorem mem_square_window_of_emerald_log_ne_zero
   · unfold lowerSquare at hloR
     exact_mod_cast hloR
   · unfold upperSquare at hupR
-    exact_mod_cast hupR
+    have hupNat : m < (n + 1) ^ 2 := by
+      exact_mod_cast hupR
+    exact hupNat.le
 
 end
 end KernelEsmeralda
