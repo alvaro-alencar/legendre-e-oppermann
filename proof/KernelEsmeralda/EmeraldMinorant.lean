@@ -1,4 +1,5 @@
 import Mathlib.Geometry.Manifold.PartitionOfUnity
+import Mathlib.Analysis.SpecialFunctions.ExpDeriv
 import KernelEsmeralda.PrimePowerWindowSqrt
 
 open Set
@@ -121,6 +122,21 @@ theorem weil_prime_factor_normalization
       exact_mod_cast hm
     exact (Real.sqrt_pos.2 hmR).ne'
   field_simp [hsqrt]
+
+/-- O teste inclinado herda suavidade suficiente para a fórmula explícita. -/
+theorem emeraldTilt_contDiff_two
+    (K : Real → Real) (hK : ContDiff Real ∞ K) :
+    ContDiff Real 2 (emeraldTilt K) := by
+  unfold emeraldTilt
+  fun_prop
+
+/-- Multiplicar pelo fator exponencial não amplia o suporte compacto de `K`. -/
+theorem emeraldTilt_hasCompactSupport
+    (K : Real → Real) (hK : HasCompactSupport K) :
+    HasCompactSupport (emeraldTilt K) := by
+  unfold emeraldTilt
+  simpa only [Pi.mul_apply] using
+    (hK.mul_left (f := fun u : Real => Real.exp (u / 2)))
 
 end
 end KernelEsmeralda
