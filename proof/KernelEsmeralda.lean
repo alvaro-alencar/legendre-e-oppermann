@@ -1,2 +1,2 @@
-import KernelEsmeralda.Detection
+import KernelEsmeralda.DetectionCore
 import KernelEsmeralda.ChebyshevBridge
