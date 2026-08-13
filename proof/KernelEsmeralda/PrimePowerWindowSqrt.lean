@@ -50,7 +50,8 @@ theorem remainderDelta_le_explicit_roots (n : Nat) :
       (Real.log 4 + 4) * (upperSquare n ^ (1 / (3 : Real))) +
       (Real.log 4 + 4) * (upperSquare n ^ (1 / (5 : Real))) := by
   have hu : 0 ≤ upperSquare n := by
-    simp [upperSquare]
+    unfold upperSquare
+    exact sq_nonneg _
   have h3 := Chebyshev.psi_le_const_mul_self
     (x := upperSquare n ^ (1 / (3 : Real))) (Real.rpow_nonneg hu _)
   have h5 := Chebyshev.psi_le_const_mul_self
