@@ -47,5 +47,49 @@ theorem exists_smooth_emerald_minorant
   · intro x hx
     exact (hKone x).1 hx
 
+/-- Extremos logarítmicos da janela entre quadrados consecutivos. -/
+def emeraldLogLeft (n : Nat) : Real := Real.log (lowerSquare n)
+def emeraldLogRight (n : Nat) : Real := Real.log (upperSquare n)
+
+/-- Metade central da janela logarítmica, usada como núcleo onde o minorante vale `1`. -/
+def emeraldCoreLeft (n : Nat) : Real :=
+  (3 * emeraldLogLeft n + emeraldLogRight n) / 4
+
+def emeraldCoreRight (n : Nat) : Real :=
+  (emeraldLogLeft n + 3 * emeraldLogRight n) / 4
+
+/-- Para cada `n ≥ 1` existe um Kernel de Esmeralda minorante suave,
+suportado estritamente em `(log n², log (n+1)²)` e igual a `1`
+na metade central dessa janela. -/
+theorem exists_emerald_minorant_between_square_logs
+    (n : Nat) (hn : 1 ≤ n) :
+    ∃ K : Real → Real,
+      ContDiff Real ∞ K ∧
+      HasCompactSupport K ∧
+      (∀ x : Real, 0 ≤ K x ∧ K x ≤ 1) ∧
+      (∀ x ∈ Icc (emeraldCoreLeft n) (emeraldCoreRight n), K x = 1) ∧
+      Function.support K ⊆ Ioo (emeraldLogLeft n) (emeraldLogRight n) := by
+  have hnposNat : 0 < n := lt_of_lt_of_le Nat.zero_lt_one hn
+  have hnpos : (0 : Real) < n := by
+    exact_mod_cast hnposNat
+  have hsucc : (n : Real) < (((n + 1 : Nat) : Real)) := by
+    exact_mod_cast Nat.lt_succ_self n
+  have hlpos : 0 < lowerSquare n := by
+    unfold lowerSquare
+    positivity
+  have hsquares : lowerSquare n < upperSquare n := by
+    unfold lowerSquare upperSquare
+    nlinarith
+  have hlog : emeraldLogLeft n < emeraldLogRight n := by
+    unfold emeraldLogLeft emeraldLogRight
+    exact Real.log_lt_log hlpos hsquares
+  have hleft : emeraldLogLeft n < emeraldCoreLeft n := by
+    unfold emeraldCoreLeft
+    linarith
+  have hright : emeraldCoreRight n < emeraldLogRight n := by
+    unfold emeraldCoreRight
+    linarith
+  exact exists_smooth_emerald_minorant hleft hright
+
 end
 end KernelEsmeralda
