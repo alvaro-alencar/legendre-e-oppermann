@@ -19,7 +19,7 @@ theorem lowerSquare_rpow_half (n : Nat) :
 theorem psi_nat_succ_sub_eq_vonMangoldt (n : Nat) :
     Chebyshev.psi (((n + 1 : Nat) : Real)) - Chebyshev.psi (n : Real) =
       ArithmeticFunction.vonMangoldt (n + 1) := by
-  simp only [Chebyshev.psi, floor_natCast]
+  simp only [Chebyshev.psi, Nat.floor_natCast]
   rw [Finset.sum_Ioc_succ_top (Nat.zero_le n)]
   ring
 
