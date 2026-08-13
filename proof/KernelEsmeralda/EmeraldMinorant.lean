@@ -119,7 +119,7 @@ theorem emeraldTilt_contDiff_two
     (K : Real → Real) (hK : ContDiff Real ∞ K) :
     ContDiff Real 2 (emeraldTilt K) := by
   unfold emeraldTilt
-  have hK2 : ContDiff Real 2 K := hK.of_le (by simp)
+  have hK2 : ContDiff Real 2 K := (contDiff_infty.1 hK) 2
   have hexp : ContDiff Real 2 (fun u : Real => Real.exp (u / 2)) := by
     fun_prop
   exact hexp.mul hK2
