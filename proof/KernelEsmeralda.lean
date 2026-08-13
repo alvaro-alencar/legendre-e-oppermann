@@ -4,3 +4,4 @@ import KernelEsmeralda.PrimeFromThetaCore
 import KernelEsmeralda.LegendreCriterion
 import KernelEsmeralda.PrimePowerWindow
 import KernelEsmeralda.PrimePowerWindowSqrt
+import KernelEsmeralda.EmeraldMinorant
