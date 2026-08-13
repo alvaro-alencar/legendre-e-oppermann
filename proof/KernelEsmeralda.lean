@@ -3,3 +3,4 @@ import KernelEsmeralda.ChebyshevBridge
 import KernelEsmeralda.PrimeFromThetaCore
 import KernelEsmeralda.LegendreCriterion
 import KernelEsmeralda.PrimePowerWindow
+import KernelEsmeralda.PrimePowerWindowSqrt
