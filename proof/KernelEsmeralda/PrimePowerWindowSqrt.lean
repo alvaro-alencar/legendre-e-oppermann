@@ -39,7 +39,8 @@ theorem deltaPsi_eq_vonMangoldt_window (n : Nat) :
   have hu : ⌊upperSquare n⌋₊ = (n + 1) ^ 2 := by
     rw [upperSquare, ← Nat.cast_pow, Nat.floor_natCast]
   have hsq : n ^ 2 ≤ (n + 1) ^ 2 := by
-    nlinarith
+    simpa [pow_two] using
+      Nat.mul_le_mul (Nat.le_succ n) (Nat.le_succ n)
   have hsum := Finset.sum_Ioc_consecutive
     (fun m : Nat => ArithmeticFunction.vonMangoldt m)
     (Nat.zero_le (n ^ 2)) hsq
