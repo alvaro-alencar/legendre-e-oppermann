@@ -30,6 +30,23 @@ theorem psi_nat_succ_sub_le_log (n : Nat) :
   rw [psi_nat_succ_sub_eq_vonMangoldt]
   exact ArithmeticFunction.vonMangoldt_le_log
 
+theorem deltaPsi_eq_vonMangoldt_window (n : Nat) :
+    deltaPsi n =
+      ∑ m ∈ Finset.Ioc (n ^ 2) ((n + 1) ^ 2),
+        ArithmeticFunction.vonMangoldt m := by
+  have hl : ⌊lowerSquare n⌋₊ = n ^ 2 := by
+    rw [lowerSquare, ← Nat.cast_pow, Nat.floor_natCast]
+  have hu : ⌊upperSquare n⌋₊ = (n + 1) ^ 2 := by
+    rw [upperSquare, ← Nat.cast_pow, Nat.floor_natCast]
+  have hsq : n ^ 2 ≤ (n + 1) ^ 2 := by
+    nlinarith
+  have hsum := Finset.sum_Ioc_consecutive
+    (fun m : Nat => ArithmeticFunction.vonMangoldt m)
+    (Nat.zero_le (n ^ 2)) hsq
+  unfold deltaPsi Chebyshev.psi
+  rw [hu, hl]
+  linarith
+
 theorem remainderDelta_le_costa_window_sqrt (n : Nat) :
     higherPowerRemainder (upperSquare n) - higherPowerRemainder (lowerSquare n) <=
       (Chebyshev.psi (((n + 1 : Nat) : Real)) - Chebyshev.psi (n : Real)) +
