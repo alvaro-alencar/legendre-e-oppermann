@@ -9,3 +9,4 @@ import KernelEsmeralda.WeilInterface
 import KernelEsmeralda.WeilPrimeBridge
 import KernelEsmeralda.ResearchTarget
 import KernelEsmeralda.PoleAnalysis
+import KernelEsmeralda.PoleIntegral
