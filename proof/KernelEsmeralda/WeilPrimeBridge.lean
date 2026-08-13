@@ -63,5 +63,44 @@ theorem emeraldWeilWindowPrimeSum_eq_emeraldMass
   rw [emeraldWeilWindowPrimeSum_eq_mass_sum K n hn hsupp]
   simp [emeraldMass]
 
+/-- Se o peso é não nulo em `log m`, então `m` pertence à janela quadrática. -/
+theorem mem_square_window_of_emerald_log_ne_zero
+    (K : Real → Real) (n m : Nat) (hn : 2 ≤ n)
+    (hsupp : Function.support K ⊆ Ioo (emeraldLogLeft n) (emeraldLogRight n))
+    (hK : K (Real.log (m : Real)) ≠ 0) :
+    m ∈ Finset.Ioc (n ^ 2) ((n + 1) ^ 2) := by
+  have hs : Real.log (m : Real) ∈ Function.support K := hK
+  have hi := hsupp hs
+  have hnposNat : 0 < n := lt_of_lt_of_le Nat.zero_lt_two hn
+  have hnpos : (0 : Real) < n := by exact_mod_cast hnposNat
+  have hlpos : 0 < lowerSquare n := by
+    unfold lowerSquare
+    positivity
+  have hsquares : lowerSquare n < upperSquare n := by
+    unfold lowerSquare upperSquare
+    have hsucc : (n : Real) < (((n + 1 : Nat) : Real)) := by
+      exact_mod_cast Nat.lt_succ_self n
+    nlinarith
+  have hupos : 0 < upperSquare n := hlpos.trans hsquares
+  have hleftlog : 0 < emeraldLogLeft n := by
+    unfold emeraldLogLeft
+    exact Real.log_pos (by
+      unfold lowerSquare
+      nlinarith [sq_nonneg ((n : Real) - 1)])
+  have hlogpos : 0 < Real.log (m : Real) := hleftlog.trans hi.1
+  have hmgt1 : (1 : Real) < m :=
+    (Real.log_pos_iff (Nat.cast_nonneg m)).1 hlogpos
+  have hmpos : (0 : Real) < m := zero_lt_one.trans hmgt1
+  have hloR : lowerSquare n < (m : Real) :=
+    (Real.log_lt_log_iff hlpos hmpos).1 hi.1
+  have hupR : (m : Real) < upperSquare n :=
+    (Real.log_lt_log_iff hmpos hupos).1 hi.2
+  rw [Finset.mem_Ioc]
+  constructor
+  · unfold lowerSquare at hloR
+    exact_mod_cast hloR
+  · unfold upperSquare at hupR
+    exact_mod_cast hupR
+
 end
 end KernelEsmeralda
