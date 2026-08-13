@@ -21,5 +21,14 @@ theorem emeraldWeilTest_hasCompactSupport
   change HasCompactSupport (Complex.ofReal ∘ emeraldTilt K)
   exact (emeraldTilt_hasCompactSupport K hK).comp_left (by simp)
 
+theorem weil_prime_factor_normalization_complex
+    (K : Real → Real) (m : Nat) (hm : 0 < m) :
+    ((ArithmeticFunction.vonMangoldt m / Real.sqrt (m : Real) : Real) : Complex) *
+        emeraldWeilTest K (Real.log (m : Real)) =
+      ((ArithmeticFunction.vonMangoldt m * K (Real.log (m : Real)) : Real) : Complex) := by
+  simpa [emeraldWeilTest] using
+    congrArg (fun x : Real => (x : Complex))
+      (weil_prime_factor_normalization K m hm)
+
 end
 end KernelEsmeralda
