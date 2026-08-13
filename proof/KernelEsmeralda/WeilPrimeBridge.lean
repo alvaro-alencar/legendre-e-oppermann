@@ -1,3 +1,4 @@
+import Mathlib.Topology.Algebra.InfiniteSum.Basic
 import KernelEsmeralda.WeilInterface
 
 open Set
@@ -7,8 +8,6 @@ namespace KernelEsmeralda
 
 noncomputable section
 
-/-- Para `n ≥ 2`, o suporte do Kernel de Esmeralda fica à direita de zero;
-portanto o ramo refletido `k(-log m)` da fórmula de Weil desaparece. -/
 theorem emeraldWeilTest_neg_log_eq_zero
     (K : Real → Real) (n m : Nat) (hn : 2 ≤ n)
     (hsupp : Function.support K ⊆ Ioo (emeraldLogLeft n) (emeraldLogRight n)) :
@@ -33,14 +32,12 @@ theorem emeraldWeilTest_neg_log_eq_zero
     exact (lt_asymm hi.1 hneg)
   simp [emeraldWeilTest, emeraldTilt, hKneg]
 
-/-- Parte do lado primo de Weil restrita à janela de Legendre. -/
 def emeraldWeilWindowPrimeSum (K : Real → Real) (n : Nat) : Complex :=
   ∑ m ∈ Finset.Ioc (n ^ 2) ((n + 1) ^ 2),
     ((ArithmeticFunction.vonMangoldt m / Real.sqrt (m : Real) : Real) : Complex) *
       (emeraldWeilTest K (Real.log (m : Real)) +
         emeraldWeilTest K (-Real.log (m : Real)))
 
-/-- Na janela, o lado primo de Weil coincide termo a termo com a massa esmeralda. -/
 theorem emeraldWeilWindowPrimeSum_eq_mass_sum
     (K : Real → Real) (n : Nat) (hn : 2 ≤ n)
     (hsupp : Function.support K ⊆ Ioo (emeraldLogLeft n) (emeraldLogRight n)) :
@@ -55,7 +52,6 @@ theorem emeraldWeilWindowPrimeSum_eq_mass_sum
   rw [emeraldWeilTest_neg_log_eq_zero K n m hn hsupp, add_zero]
   exact weil_prime_factor_normalization_complex K m hmpos
 
-/-- Em particular, a soma prima de Weil na janela é o `emeraldMass` real embutido em `ℂ`. -/
 theorem emeraldWeilWindowPrimeSum_eq_emeraldMass
     (K : Real → Real) (n : Nat) (hn : 2 ≤ n)
     (hsupp : Function.support K ⊆ Ioo (emeraldLogLeft n) (emeraldLogRight n)) :
@@ -63,7 +59,6 @@ theorem emeraldWeilWindowPrimeSum_eq_emeraldMass
   rw [emeraldWeilWindowPrimeSum_eq_mass_sum K n hn hsupp]
   simp [emeraldMass]
 
-/-- Se o peso é não nulo em `log m`, então `m` pertence à janela quadrática. -/
 theorem mem_square_window_of_emerald_log_ne_zero
     (K : Real → Real) (n m : Nat) (hn : 2 ≤ n)
     (hsupp : Function.support K ⊆ Ioo (emeraldLogLeft n) (emeraldLogRight n))
@@ -105,6 +100,44 @@ theorem mem_square_window_of_emerald_log_ne_zero
     have hupNat : m < (n + 1) ^ 2 := by
       exact_mod_cast hupR
     exact hupNat.le
+
+def emeraldWeilPrimeTerm (K : Real → Real) (m : Nat) : Complex :=
+  ((ArithmeticFunction.vonMangoldt m / Real.sqrt (m : Real) : Real) : Complex) *
+    (emeraldWeilTest K (Real.log (m : Real)) +
+      emeraldWeilTest K (-Real.log (m : Real)))
+
+theorem emeraldWeilPrimeTerm_eq_zero_of_not_mem_window
+    (K : Real → Real) (n m : Nat) (hn : 2 ≤ n)
+    (hsupp : Function.support K ⊆ Ioo (emeraldLogLeft n) (emeraldLogRight n))
+    (hm : m ∉ Finset.Ioc (n ^ 2) ((n + 1) ^ 2)) :
+    emeraldWeilPrimeTerm K m = 0 := by
+  have hK : K (Real.log (m : Real)) = 0 := by
+    by_contra hne
+    exact hm (mem_square_window_of_emerald_log_ne_zero K n m hn hsupp hne)
+  have hpos : emeraldWeilTest K (Real.log (m : Real)) = 0 := by
+    simp [emeraldWeilTest, emeraldTilt, hK]
+  have hneg := emeraldWeilTest_neg_log_eq_zero K n m hn hsupp
+  simp [emeraldWeilPrimeTerm, hpos, hneg]
+
+def emeraldWeilPrimeSide (K : Real → Real) : Complex :=
+  ∑' m : Nat, emeraldWeilPrimeTerm K m
+
+theorem emeraldWeilPrimeSide_eq_window
+    (K : Real → Real) (n : Nat) (hn : 2 ≤ n)
+    (hsupp : Function.support K ⊆ Ioo (emeraldLogLeft n) (emeraldLogRight n)) :
+    emeraldWeilPrimeSide K = emeraldWeilWindowPrimeSum K n := by
+  unfold emeraldWeilPrimeSide emeraldWeilWindowPrimeSum
+  apply HasSum.tsum_eq
+  apply hasSum_sum_of_ne_finset_zero
+  intro m hm
+  exact emeraldWeilPrimeTerm_eq_zero_of_not_mem_window K n m hn hsupp hm
+
+theorem emeraldWeilPrimeSide_eq_emeraldMass
+    (K : Real → Real) (n : Nat) (hn : 2 ≤ n)
+    (hsupp : Function.support K ⊆ Ioo (emeraldLogLeft n) (emeraldLogRight n)) :
+    emeraldWeilPrimeSide K = (emeraldMass K n : Complex) := by
+  rw [emeraldWeilPrimeSide_eq_window K n hn hsupp]
+  exact emeraldWeilWindowPrimeSum_eq_emeraldMass K n hn hsupp
 
 end
 end KernelEsmeralda
