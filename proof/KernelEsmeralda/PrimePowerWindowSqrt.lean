@@ -44,5 +44,16 @@ theorem remainderDelta_le_log_add_roots (n : Nat) :
       Chebyshev.psi (upperSquare n ^ (1 / (5 : Real))) := by
   linarith [remainderDelta_le_costa_window_sqrt n, psi_nat_succ_sub_le_log n]
 
+theorem remainderDelta_le_explicit_roots (n : Nat) :
+    higherPowerRemainder (upperSquare n) - higherPowerRemainder (lowerSquare n) <=
+      Real.log (((n + 1 : Nat) : Real)) +
+      (Real.log 4 + 4) * (upperSquare n ^ (1 / (3 : Real))) +
+      (Real.log 4 + 4) * (upperSquare n ^ (1 / (5 : Real))) := by
+  have h3 := Chebyshev.psi_le_const_mul_self
+    (x := upperSquare n ^ (1 / (3 : Real))) (by positivity)
+  have h5 := Chebyshev.psi_le_const_mul_self
+    (x := upperSquare n ^ (1 / (5 : Real))) (by positivity)
+  linarith [remainderDelta_le_log_add_roots n, h3, h5]
+
 end
 end KernelEsmeralda
