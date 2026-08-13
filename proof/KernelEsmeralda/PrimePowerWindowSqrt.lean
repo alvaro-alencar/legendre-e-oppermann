@@ -1,5 +1,7 @@
 import KernelEsmeralda.PrimePowerWindow
 
+open scoped BigOperators
+
 namespace KernelEsmeralda
 
 noncomputable section
@@ -14,6 +16,19 @@ theorem lowerSquare_rpow_half (n : Nat) :
   rw [← Real.sqrt_eq_rpow, lowerSquare]
   simpa using Real.sqrt_sq (show 0 ≤ (n : Real) by positivity)
 
+theorem psi_nat_succ_sub_eq_vonMangoldt (n : Nat) :
+    Chebyshev.psi (((n + 1 : Nat) : Real)) - Chebyshev.psi (n : Real) =
+      ArithmeticFunction.vonMangoldt (n + 1) := by
+  simp only [Chebyshev.psi, floor_natCast]
+  rw [Finset.sum_Ioc_succ_top (Nat.zero_le n)]
+  ring
+
+theorem psi_nat_succ_sub_le_log (n : Nat) :
+    Chebyshev.psi (((n + 1 : Nat) : Real)) - Chebyshev.psi (n : Real) ≤
+      Real.log (((n + 1 : Nat) : Real)) := by
+  rw [psi_nat_succ_sub_eq_vonMangoldt]
+  exact ArithmeticFunction.vonMangoldt_le_log
+
 theorem remainderDelta_le_costa_window_sqrt (n : Nat) :
     higherPowerRemainder (upperSquare n) - higherPowerRemainder (lowerSquare n) <=
       (Chebyshev.psi (((n + 1 : Nat) : Real)) - Chebyshev.psi (n : Real)) +
@@ -21,6 +36,13 @@ theorem remainderDelta_le_costa_window_sqrt (n : Nat) :
       Chebyshev.psi (upperSquare n ^ (1 / (5 : Real))) := by
   rw [← upperSquare_rpow_half n, ← lowerSquare_rpow_half n]
   exact remainderDelta_le_costa_window n
+
+theorem remainderDelta_le_log_add_roots (n : Nat) :
+    higherPowerRemainder (upperSquare n) - higherPowerRemainder (lowerSquare n) <=
+      Real.log (((n + 1 : Nat) : Real)) +
+      Chebyshev.psi (upperSquare n ^ (1 / (3 : Real))) +
+      Chebyshev.psi (upperSquare n ^ (1 / (5 : Real))) := by
+  linarith [remainderDelta_le_costa_window_sqrt n, psi_nat_succ_sub_le_log n]
 
 end
 end KernelEsmeralda
