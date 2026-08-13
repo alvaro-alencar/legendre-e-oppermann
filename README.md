@@ -1,47 +1,135 @@
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/alvaro-alencar/legendre-e-oppermann/blob/main/Analise_Primos_Legendre.ipynb)
-# 🧪 Math Lab: Validação Numérica de Conjecturas de Primos
+# 🧪 Math Lab: Legendre e Oppermann
 
-Este projeto é um laboratório computacional desenvolvido para testar a robustez de conjecturas clássicas da Teoria dos Números utilizando Python de alta performance.
+Laboratório computacional para explorar numericamente a **Conjectura de Legendre** e a **Conjectura de Oppermann**, além de comparar a contagem exata de primos com um preditor heurístico baseado em uma forma truncada da fórmula explícita de Riemann.
 
-O objetivo principal foi validar a **Conjectura de Legendre** e a **Conjectura de Oppermann** até $n = 1.000.000$, cruzando contagens reais de números primos com predições analíticas baseadas nos Zeros Não-Triviais da Função Zeta de Riemann.
+## ⚠️ Status científico
 
-## 🎯 O Que Foi Testado?
+Este repositório contém **experimentos numéricos**, não uma prova das conjecturas.
 
-1.  **Conjectura de Legendre:** Existe sempre um número primo entre $n^2$ e $(n+1)^2$?
-2.  **Conjectura de Oppermann:** A distribuição dos primos é simétrica? Ou seja, existem primos tanto na metade inferior $[n^2, n(n+1)]$ quanto na superior $[n(n+1), (n+1)^2]$?
+Na configuração padrão atual:
 
-## 📊 Resultados Visuais
+```python
+N_START = 10_000
+N_END   = 1_000_000
+N_STEP  = 10_000
+```
 
-A validação foi bem sucedida para 100% dos casos no intervalo testado.
+o programa testa apenas os valores efetivamente percorridos por esse passo. Portanto, o experimento padrão é **amostral**: ele não verifica todos os inteiros até `1_000_000`.
 
-### Visão Geral da Distribuição e Erro
-![Overview dos Resultados](overview.png)
-*O gráfico "Real vs Predito" (canto inferior direito) demonstra a precisão da Fórmula Explícita de Riemann ao prever a contagem de primos.*
+A implementação corrigida e atualmente autoritativa é:
 
-### Análise de Simetria e Estabilidade
-![Análise Log-Log](analysis.png)
-*A análise Log-Log sugere que o erro cresce de forma controlada ($\alpha < 0.5$), consistente com a Hipótese de Riemann.*
+```text
+Analise_Primos_Legendre.py
+```
 
-## 🛠️ Stack Tecnológico
+O arquivo antigo `Analise_Primos_Legendre.ipynb` é preservado como artefato legado e não deve ser usado como referência científica até ser regenerado a partir da versão corrigida.
 
-Este projeto foi desenvolvido com foco em "Vibe Coding" (eficiência e prototipagem rápida) mas com rigor matemático:
+## 🎯 O que é testado
 
-* **Python 3.10+**
-* **Numba (JIT):** Para compilação *Just-In-Time* das funções de soma sobre os zeros da Zeta (velocidade próxima de C).
-* **SymPy:** Para a função `primepi` (contagem exata de primos - "Ground Truth").
-* **Mpmath:** Para cálculo de alta precisão dos zeros da função Zeta.
-* **Matplotlib:** Visualização de dados.
+### Conjectura de Legendre
 
-## 🚀 Como Executar
+Para cada inteiro positivo `n`, a conjectura afirma que existe pelo menos um primo no intervalo
 
-Este projeto foi otimizado para rodar no Google Colab.
+\[
+n^2 < p < (n+1)^2.
+\]
 
-1.  Abra o arquivo `.ipynb` neste repositório.
-2.  Clique no botão "Open in Colab".
-3.  Execute as células sequencialmente.
-    * *Nota: O script calcula automaticamente os zeros da Zeta na primeira execução e cria um cache local.*
+No código, a contagem exata é obtida com `sympy.primepi`.
+
+### Conjectura de Oppermann
+
+Para `n > 1`, a conjectura requer pelo menos um primo em cada uma das duas metades:
+
+\[
+n^2 < p < n(n+1)
+\]
+
+and
+
+\[
+n(n+1) < q < (n+1)^2.
+\]
+
+O programa testa essas duas condições separadamente.
+
+## 🔬 Preditor pela fórmula explícita
+
+O projeto também usa um preditor exploratório baseado em uma soma truncada sobre zeros não triviais da função zeta.
+
+Para `rho = 1/2 + i gamma`, a contribuição real correta é
+
+\[
+\operatorname{Re}\left(\frac{x^\rho}{\rho}\right)
+=
+\frac{\sqrt{x}\left(\frac12\cos(\gamma\log x)+\gamma\sin(\gamma\log x)\right)}{\frac14+\gamma^2}.
+\]
+
+A versão anterior dividia por `sqrt(1/4 + gamma^2)`. Isso foi corrigido para o denominador correto `1/4 + gamma^2`.
+
+### Limitação importante
+
+`mpmath.zetazero(k)` fornece as ordenadas `gamma` dos zeros conhecidos na linha crítica, e o modelo numérico os representa como
+
+\[
+\rho = \frac12 + i\gamma.
+\]
+
+Logo, esse preditor é **truncado e condicionado à linha crítica**. Ele não pode ser usado como evidência independente para a Hipótese de Riemann.
+
+Além disso, a transformação
+
+\[
+\Delta\psi / \log x
+\]
+
+em uma estimativa da quantidade de primos é heurística: `psi(x)` pesa primos por `log p` e também inclui potências de primos.
+
+## 📊 Sobre os resultados existentes
+
+Os arquivos `overview.png` e `analysis.png` pertencem à rodada histórica anterior à correção da fórmula explícita. Eles são mantidos para registro, mas **não devem ser tratados como resultados da implementação corrigida**.
+
+Ao executar `Analise_Primos_Legendre.py`, novos gráficos são gerados como:
+
+```text
+overview_corrected.png
+analysis_corrected.png
+```
+
+## 🛠️ Stack
+
+- Python 3.10+
+- NumPy
+- Numba
+- SymPy
+- mpmath
+- Matplotlib
+- tqdm
+
+## 🚀 Como executar
+
+```bash
+pip install -r requirements.txt
+python Analise_Primos_Legendre.py
+```
+
+A configuração fica no dicionário `CONFIG` no início do arquivo.
+
+Se `N_STEP = 1`, o programa percorre todos os inteiros do intervalo configurado. Isso pode ser computacionalmente muito mais caro, especialmente porque `primepi` é chamado repetidamente em valores da ordem de `n^2`.
+
+## 🧭 Próxima etapa: do experimento à prova
+
+A camada numérica deve ser separada da eventual tentativa de prova formal. Um caminho natural é criar uma pasta `proof/` para formalizar, em ordem:
+
+1. a decomposição de `psi((n+1)^2) - psi(n^2)`;
+2. a separação rigorosa entre contribuições de primos e potências de primos;
+3. o Kernel de Esmeralda e suas propriedades analíticas;
+4. a cota efetiva do termo envolvendo os zeros da zeta;
+5. somente então, qualquer conclusão assintótica sobre Legendre ou Oppermann.
+
+O objetivo científico correto é localizar exatamente o primeiro lema que pode ser provado com rigor, e não antecipar a conclusão.
 
 ## 👨‍💻 Autor
 
 **Álvaro Alencar**
-*Fundador da Vortex Development | Curador de IA*
+
+Fundador da Vortex Development | Curador de IA
