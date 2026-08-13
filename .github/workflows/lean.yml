@@ -11,23 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install Lean and Lake with Elan
-        run: |
-          curl -sSf https://elan.lean-lang.org/elan-init.sh | sh -s -- -y --default-toolchain none
-          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
-
-      - name: Resolve Mathlib dependencies
-        working-directory: proof
-        run: |
-          lean --version
-          lake --version
-          lake update
-
-      - name: Download Mathlib cache
-        working-directory: proof
-        run: lake exe cache get
-
-      - name: Kernel-check formalization
-        working-directory: proof
-        run: lake build
+      - name: Install Lean/Lake and kernel-check proof
+        uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: proof
+          test: false
+          lint: false
+          use-mathlib-cache: true
+          nanoda: true
+          nanoda-allow-sorry: false
