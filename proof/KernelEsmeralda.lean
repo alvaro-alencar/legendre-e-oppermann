@@ -2,3 +2,4 @@ import KernelEsmeralda.DetectionCore
 import KernelEsmeralda.ChebyshevBridge
 import KernelEsmeralda.PrimeFromThetaCore
 import KernelEsmeralda.LegendreCriterion
+import KernelEsmeralda.PrimePowerWindow
