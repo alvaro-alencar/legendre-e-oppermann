@@ -1,6 +1,8 @@
+import Mathlib.Analysis.SpecialFunctions.Gamma.Digamma
+import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import KernelEsmeralda.WeilPrimeBridge
 
-open Set
+open Set MeasureTheory Complex
 
 namespace KernelEsmeralda
 
@@ -14,6 +16,9 @@ def emeraldBarrier (n : Nat) : Real :=
 def EmeraldWindowWeight (n : Nat) (K : Real → Real) : Prop :=
   (∀ u : Real, K u ≤ 1) ∧
   Function.support K ⊆ Ioo (emeraldLogLeft n) (emeraldLogRight n)
+
+def emeraldPaperFT (K : Real → Real) (z : Complex) : Complex :=
+  ∫ u : Real, emeraldWeilTest K u * Complex.exp (Complex.I * z * (u : Complex))
 
 end
 end KernelEsmeralda
