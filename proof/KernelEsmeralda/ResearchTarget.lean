@@ -33,5 +33,24 @@ def emeraldGammaTerm (K : Real → Real) : Complex :=
 def EmeraldExplicitBalance (K : Real → Real) (zeroSum : Complex) : Prop :=
   zeroSum = emeraldPoleTerm K - emeraldWeilPrimeSide K + emeraldGammaTerm K
 
+theorem emeraldPrimeSide_eq_spectralBalance
+    (K : Real → Real) (zeroSum : Complex)
+    (hEF : EmeraldExplicitBalance K zeroSum) :
+    emeraldWeilPrimeSide K =
+      emeraldPoleTerm K + emeraldGammaTerm K - zeroSum := by
+  unfold EmeraldExplicitBalance at hEF
+  rw [hEF]
+  ring
+
+theorem emeraldMass_eq_spectralBalance
+    (K : Real → Real) (n : Nat) (hn : 2 ≤ n)
+    (hsupp : Function.support K ⊆ Ioo (emeraldLogLeft n) (emeraldLogRight n))
+    (zeroSum : Complex) (hEF : EmeraldExplicitBalance K zeroSum) :
+    (emeraldMass K n : Complex) =
+      emeraldPoleTerm K + emeraldGammaTerm K - zeroSum := by
+  have hside := emeraldPrimeSide_eq_spectralBalance K zeroSum hEF
+  rw [emeraldWeilPrimeSide_eq_emeraldMass K n hn hsupp] at hside
+  exact hside
+
 end
 end KernelEsmeralda
