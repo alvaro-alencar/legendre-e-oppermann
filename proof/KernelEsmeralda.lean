@@ -1,3 +1,3 @@
 import KernelEsmeralda.DetectionCore
 import KernelEsmeralda.ChebyshevBridge
-import KernelEsmeralda.PrimeFromTheta
+import KernelEsmeralda.PrimeFromThetaCore
