@@ -1,4 +1,4 @@
-name = "kernel-esmeralda"
+name = "KernelEsmeraldaProject"
 version = "0.1.0"
 defaultTargets = ["KernelEsmeralda"]
 
