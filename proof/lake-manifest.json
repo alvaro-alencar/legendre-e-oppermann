@@ -111,6 +111,6 @@
    "configFile": "lakefile.lean"
   }
  ],
- "name": "kernel-esmeralda",
+ "name": "KernelEsmeraldaProject",
  "lakeDir": ".lake"
 }
