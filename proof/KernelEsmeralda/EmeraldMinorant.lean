@@ -48,20 +48,15 @@ theorem exists_smooth_emerald_minorant
   · intro x hx
     exact (hKone x).1 hx
 
-/-- Extremos logarítmicos da janela entre quadrados consecutivos. -/
 def emeraldLogLeft (n : Nat) : Real := Real.log (lowerSquare n)
 def emeraldLogRight (n : Nat) : Real := Real.log (upperSquare n)
 
-/-- Metade central da janela logarítmica, usada como núcleo onde o minorante vale `1`. -/
 def emeraldCoreLeft (n : Nat) : Real :=
   (3 * emeraldLogLeft n + emeraldLogRight n) / 4
 
 def emeraldCoreRight (n : Nat) : Real :=
   (emeraldLogLeft n + 3 * emeraldLogRight n) / 4
 
-/-- Para cada `n ≥ 1` existe um Kernel de Esmeralda minorante suave,
-suportado estritamente em `(log n², log (n+1)²)` e igual a `1`
-na metade central dessa janela. -/
 theorem exists_emerald_minorant_between_square_logs
     (n : Nat) (hn : 1 ≤ n) :
     ∃ K : Real → Real,
@@ -92,11 +87,9 @@ theorem exists_emerald_minorant_between_square_logs
     linarith
   exact exists_smooth_emerald_minorant hleft hright
 
-/-- Normalização real do teste para a fórmula explícita: `k(u)=e^(u/2)K(u)`. -/
 def emeraldTilt (K : Real → Real) (u : Real) : Real :=
   Real.exp (u / 2) * K u
 
-/-- Em `u = log m`, a inclinação exponencial é exatamente `sqrt m`. -/
 theorem emeraldTilt_log_eq_sqrt_mul
     (K : Real → Real) (m : Nat) (hm : 0 < m) :
     emeraldTilt K (Real.log (m : Real)) =
@@ -110,7 +103,6 @@ theorem emeraldTilt_log_eq_sqrt_mul
     ring
   rw [hexp]
 
-/-- O `e^(u/2)` cancela exatamente o `1/sqrt m` do lado primo de Weil. -/
 theorem weil_prime_factor_normalization
     (K : Real → Real) (m : Nat) (hm : 0 < m) :
     (ArithmeticFunction.vonMangoldt m / Real.sqrt (m : Real)) *
@@ -123,20 +115,24 @@ theorem weil_prime_factor_normalization
     exact (Real.sqrt_pos.2 hmR).ne'
   field_simp [hsqrt]
 
-/-- O teste inclinado herda suavidade suficiente para a fórmula explícita. -/
 theorem emeraldTilt_contDiff_two
     (K : Real → Real) (hK : ContDiff Real ∞ K) :
     ContDiff Real 2 (emeraldTilt K) := by
   unfold emeraldTilt
-  fun_prop
+  have hK2 : ContDiff Real 2 K := hK.of_le (by simp)
+  have hexp : ContDiff Real 2 (fun u : Real => Real.exp (u / 2)) := by
+    fun_prop
+  exact hexp.mul hK2
 
-/-- Multiplicar pelo fator exponencial não amplia o suporte compacto de `K`. -/
 theorem emeraldTilt_hasCompactSupport
     (K : Real → Real) (hK : HasCompactSupport K) :
     HasCompactSupport (emeraldTilt K) := by
-  unfold emeraldTilt
-  simpa only [Pi.mul_apply] using
-    (hK.mul_left (f := fun u : Real => Real.exp (u / 2)))
+  apply hK.mono
+  intro u hu
+  simp only [Function.mem_support] at hu ⊢
+  intro hKu
+  apply hu
+  simp [emeraldTilt, hKu]
 
 end
 end KernelEsmeralda
