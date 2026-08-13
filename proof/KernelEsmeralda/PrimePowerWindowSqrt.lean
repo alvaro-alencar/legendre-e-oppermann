@@ -48,6 +48,25 @@ theorem deltaPsi_eq_vonMangoldt_window (n : Nat) :
   rw [hu, hl]
   linarith
 
+/-- Massa de von Mangoldt suavizada por um peso logarítmico dentro da janela de Legendre. -/
+def emeraldMass (K : Real → Real) (n : Nat) : Real :=
+  ∑ m ∈ Finset.Ioc (n ^ 2) ((n + 1) ^ 2),
+    ArithmeticFunction.vonMangoldt m * K (Real.log m)
+
+/-- Qualquer peso limitado superiormente por `1` produz massa no máximo igual a `Δψ`. -/
+theorem emeraldMass_le_deltaPsi
+    (K : Real → Real)
+    (hK : ∀ u : Real, K u ≤ 1)
+    (n : Nat) :
+    emeraldMass K n ≤ deltaPsi n := by
+  rw [deltaPsi_eq_vonMangoldt_window]
+  unfold emeraldMass
+  apply Finset.sum_le_sum
+  intro m hm
+  have hΛ : 0 ≤ ArithmeticFunction.vonMangoldt m :=
+    ArithmeticFunction.vonMangoldt_nonneg
+  simpa using mul_le_mul_of_nonneg_left (hK (Real.log m)) hΛ
+
 theorem remainderDelta_le_costa_window_sqrt (n : Nat) :
     higherPowerRemainder (upperSquare n) - higherPowerRemainder (lowerSquare n) <=
       (Chebyshev.psi (((n + 1 : Nat) : Real)) - Chebyshev.psi (n : Real)) +
@@ -87,6 +106,20 @@ theorem legendre_of_deltaPsi_gt_explicit_roots
     ∃ p : Nat, Nat.Prime p ∧ n ^ 2 < p ∧ p < (n + 1) ^ 2 := by
   apply legendre_of_deltaPsi_gt_remainderDelta n
   exact lt_of_le_of_lt (remainderDelta_le_explicit_roots n) hdom
+
+/-- Critério de Legendre formulado diretamente em termos da massa esmeralda. -/
+theorem legendre_of_emeraldMass_gt_explicit_roots
+    (K : Real → Real)
+    (hK : ∀ u : Real, K u ≤ 1)
+    (n : Nat)
+    (hmass :
+      Real.log (((n + 1 : Nat) : Real)) +
+          (Real.log 4 + 4) * (upperSquare n ^ (1 / (3 : Real))) +
+          (Real.log 4 + 4) * (upperSquare n ^ (1 / (5 : Real))) <
+        emeraldMass K n) :
+    ∃ p : Nat, Nat.Prime p ∧ n ^ 2 < p ∧ p < (n + 1) ^ 2 := by
+  apply legendre_of_deltaPsi_gt_explicit_roots n
+  exact lt_of_lt_of_le hmass (emeraldMass_le_deltaPsi K hK n)
 
 end
 end KernelEsmeralda
