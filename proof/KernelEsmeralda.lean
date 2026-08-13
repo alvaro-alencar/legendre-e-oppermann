@@ -7,3 +7,4 @@ import KernelEsmeralda.PrimePowerWindowSqrt
 import KernelEsmeralda.EmeraldMinorant
 import KernelEsmeralda.WeilInterface
 import KernelEsmeralda.WeilPrimeBridge
+import KernelEsmeralda.ResearchTarget
