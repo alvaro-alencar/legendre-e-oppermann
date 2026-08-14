@@ -12,8 +12,11 @@ theorem theta_nat_succ_sub_le_log (m : Nat) :
   split_ifs with hp
   · rw [Finset.sum_insert (Nat.notMem_primesLE m)]
     ring_nf
+    exact le_rfl
   · simp
-    exact Real.log_nonneg (by positivity)
+    apply Real.log_nonneg
+    have hm : (1 : Nat) ≤ m + 1 := Nat.succ_le_succ (Nat.zero_le m)
+    exact_mod_cast hm
 
 end
 end KernelEsmeralda
