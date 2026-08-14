@@ -16,13 +16,17 @@ theorem primePowerExponent_thetaDiff_le_log_upper
   have hp0 : (0 : Real) ≤ (1 : Real) / k := by positivity
   have hp1 : (1 : Real) / k ≤ 1 := by
     exact (div_le_one hkpos).2 (by exact_mod_cast (le_trans (by decide : 1 ≤ 2) hk))
+  have hl0 : 0 ≤ lowerSquare n := by
+    unfold lowerSquare
+    exact sq_nonneg _
   have hx0 : 0 ≤ x := by
     dsimp [x]
-    exact Real.rpow_nonneg (by positivity) _
+    exact Real.rpow_nonneg hl0 _
+  have hs : (1 : Real) ≤ (((n + 1 : Nat) : Real)) := by
+    exact_mod_cast Nat.succ_le_succ (Nat.zero_le n)
   have hu1 : (1 : Real) ≤ upperSquare n := by
-    have hnr : (2 : Real) ≤ n := by exact_mod_cast hn
     unfold upperSquare
-    nlinarith [sq_nonneg (((n + 1 : Nat) : Real) - 1)]
+    nlinarith [sq_nonneg ((((n + 1 : Nat) : Real)) - 1)]
   have hy1 : 1 ≤ y := by
     dsimp [y]
     exact Real.one_le_rpow hu1 hp0
