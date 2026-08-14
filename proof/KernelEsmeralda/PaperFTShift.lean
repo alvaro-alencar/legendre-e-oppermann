@@ -34,8 +34,15 @@ theorem paperFT_mul_exp_half
       Complex.I * (z - Complex.I / 2) * (u : Complex) =
         ((u / 2 : Real) : Complex) + Complex.I * z * (u : Complex) := by
     push_cast
-    rw [Complex.I_mul_I]
-    ring
+    calc
+      Complex.I * (z - Complex.I / 2) * (u : Complex)
+          = (Complex.I * z - (Complex.I * Complex.I) / 2) * (u : Complex) := by ring
+      _ = (Complex.I * z + 1 / 2) * (u : Complex) := by
+        rw [Complex.I_mul_I]
+        ring
+      _ = ((u / 2 : Real) : Complex) + Complex.I * z * (u : Complex) := by
+        push_cast
+        ring
   rw [harg, Complex.exp_add, ← Complex.ofReal_exp]
   ring
 
