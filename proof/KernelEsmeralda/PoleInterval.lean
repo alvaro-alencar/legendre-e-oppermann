@@ -34,5 +34,21 @@ theorem emeraldInterval_le_global_exp_weight
   rw [hinterval] at hle
   exact hle
 
+theorem emeraldPoleTerm_re_interval_lower_bound
+    (K : Real → Real) (a b : Real) (hab : a ≤ b)
+    (hKcont : Continuous K) (hKcompact : HasCompactSupport K)
+    (hKnonneg : ∀ u : Real, 0 ≤ K u)
+    (hKone : ∀ x ∈ Icc a b, K x = 1) :
+    Real.exp b - Real.exp a ≤ (emeraldPoleTerm K).re := by
+  have hneg :=
+    emeraldInterval_le_global_exp_weight K a b hab hKcont hKcompact hKnonneg hKone
+  rw [← emeraldPaperFT_neg_pole_re K] at hneg
+  have hpos := emeraldPaperFT_pos_pole_re_nonneg K hKnonneg
+  unfold emeraldPoleTerm
+  change Real.exp b - Real.exp a ≤
+    (emeraldPaperFT K (Complex.I / 2)).re +
+      (emeraldPaperFT K (-Complex.I / 2)).re
+  linarith
+
 end
 end KernelEsmeralda
