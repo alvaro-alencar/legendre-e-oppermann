@@ -39,3 +39,4 @@ import KernelEsmeralda.ThetaUnitStep
 import KernelEsmeralda.PrimePowerRootGap
 import KernelEsmeralda.ThetaShortInterval
 import KernelEsmeralda.PrimePowerExponentBound
+import KernelEsmeralda.PrimePowerLogBarrier
