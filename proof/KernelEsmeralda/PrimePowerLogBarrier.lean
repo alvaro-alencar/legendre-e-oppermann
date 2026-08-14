@@ -12,16 +12,20 @@ def primePowerCountBarrier (n : Nat) : Real :=
 def primePowerLogBarrier (n : Nat) : Real :=
   (Real.log (upperSquare n)) ^ 2 / Real.log 2
 
+private theorem one_le_upperSquare (n : Nat) :
+    (1 : Real) ≤ upperSquare n := by
+  have hs : (1 : Real) ≤ (((n + 1 : Nat) : Real)) := by
+    exact_mod_cast Nat.succ_le_succ (Nat.zero_le n)
+  unfold upperSquare
+  nlinarith [sq_nonneg ((((n + 1 : Nat) : Real)) - 1)]
+
 theorem higherPowerRemainderDelta_le_countBarrier
     (n : Nat) (hn : 2 ≤ n) :
     higherPowerRemainder (upperSquare n) -
         higherPowerRemainder (lowerSquare n) ≤
       primePowerCountBarrier n := by
   rw [higherPowerRemainderDelta_eq_exponent_sum n hn]
-  have hnr : (2 : Real) ≤ n := by exact_mod_cast hn
-  have hu1 : (1 : Real) ≤ upperSquare n := by
-    unfold upperSquare
-    nlinarith [sq_nonneg (((n + 1 : Nat) : Real) - 1)]
+  have hu1 := one_le_upperSquare n
   have hlog0 : 0 ≤ Real.log (upperSquare n) := Real.log_nonneg hu1
   calc
     (∑ k ∈ Icc 2 (higherPowerExponentCutoff n),
@@ -37,18 +41,18 @@ theorem higherPowerRemainderDelta_le_countBarrier
           Real.log (upperSquare n) := by simp
     _ ≤ (higherPowerExponentCutoff n : Real) * Real.log (upperSquare n) := by
           apply mul_le_mul_of_nonneg_right _ hlog0
-          exact_mod_cast (show (Icc 2 (higherPowerExponentCutoff n)).card ≤
-            higherPowerExponentCutoff n by simp; omega)
+          have hcardNat : (Icc 2 (higherPowerExponentCutoff n)).card ≤
+              higherPowerExponentCutoff n := by
+            simp
+            omega
+          exact_mod_cast hcardNat
     _ = primePowerCountBarrier n := rfl
 
 theorem higherPowerExponentCutoff_le_log_ratio
     (n : Nat) (hn : 2 ≤ n) :
     (higherPowerExponentCutoff n : Real) ≤
       Real.log (upperSquare n) / Real.log 2 := by
-  have hnr : (2 : Real) ≤ n := by exact_mod_cast hn
-  have hu1 : (1 : Real) ≤ upperSquare n := by
-    unfold upperSquare
-    nlinarith [sq_nonneg (((n + 1 : Nat) : Real) - 1)]
+  have hu1 := one_le_upperSquare n
   have hlog0 : 0 ≤ Real.log (upperSquare n) := Real.log_nonneg hu1
   have hlog2 : 0 < Real.log 2 := Real.log_pos (by norm_num)
   unfold higherPowerExponentCutoff
@@ -61,10 +65,7 @@ theorem higherPowerRemainderDelta_le_logBarrier
       primePowerLogBarrier n := by
   have hcount := higherPowerRemainderDelta_le_countBarrier n hn
   have hN := higherPowerExponentCutoff_le_log_ratio n hn
-  have hnr : (2 : Real) ≤ n := by exact_mod_cast hn
-  have hu1 : (1 : Real) ≤ upperSquare n := by
-    unfold upperSquare
-    nlinarith [sq_nonneg (((n + 1 : Nat) : Real) - 1)]
+  have hu1 := one_le_upperSquare n
   have hlog0 : 0 ≤ Real.log (upperSquare n) := Real.log_nonneg hu1
   have hlog2 : Real.log 2 ≠ 0 := (Real.log_pos (by norm_num : (1 : Real) < 2)).ne'
   apply hcount.trans
