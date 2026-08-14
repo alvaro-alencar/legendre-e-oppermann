@@ -12,3 +12,4 @@ import KernelEsmeralda.PoleAnalysis
 import KernelEsmeralda.PoleIntegral
 import KernelEsmeralda.PoleCore
 import KernelEsmeralda.PoleGlobal
+import KernelEsmeralda.PoleGlobalBound
