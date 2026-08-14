@@ -16,3 +16,4 @@ import KernelEsmeralda.PoleGlobalBound
 import KernelEsmeralda.PoleReal
 import KernelEsmeralda.PolePositive
 import KernelEsmeralda.PoleBudget
+import KernelEsmeralda.PoleInterval
