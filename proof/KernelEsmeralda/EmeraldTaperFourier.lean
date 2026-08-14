@@ -23,15 +23,14 @@ theorem emeraldTaper_paperFT_formula (n : Nat) (z : Complex) :
     funext u
     simp [emeraldWeilTest, emeraldTilt]
   rw [htest, paperFT_mul_exp_half]
-  change
-    Zeta23.paperFT
-        (fun u : Real =>
-          (Zeta23.Taper.phi Zeta23.Taper.smoothstep
-            (emeraldTaperLength n) (emeraldTaperWidth n)
-            (u - emeraldTaperCenter n) : Complex))
-        (z - Complex.I / 2) = _
-  rw [paperFT_translate]
-  rfl
+  let f : Real → Complex := fun v =>
+    (Zeta23.Taper.phi Zeta23.Taper.smoothstep
+      (emeraldTaperLength n) (emeraldTaperWidth n) v : Complex)
+  have htrans := paperFT_translate
+    (f := f)
+    (c := emeraldTaperCenter n)
+    (z := z - Complex.I / 2)
+  simpa [f, emeraldTaperWeight, Zeta23.Taper.phiHat] using htrans
 
 end
 end KernelEsmeralda
