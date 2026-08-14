@@ -18,6 +18,19 @@ def emeraldZetaZeroSum (K : Real → Real) : Complex :=
     (Zeta23.zetaZeroConfig.mult ρ : Complex) *
       Zeta23.paperFT (emeraldWeilTest K) (Zeta23.gammaOf ρ)
 
+theorem emeraldZetaZeroSum_summable
+    (K : Real → Real)
+    (hKsmooth : ContDiff Real ∞ K)
+    (hKcompact : HasCompactSupport K) :
+    Summable (fun ρ : Zeta23.zetaZeroConfig.carrier =>
+      (Zeta23.zetaZeroConfig.mult ρ : Complex) *
+        Zeta23.paperFT (emeraldWeilTest K) (Zeta23.gammaOf ρ)) := by
+  have hk2 : ContDiff Real 2 (emeraldWeilTest K) :=
+    emeraldWeilTest_contDiff_two K hKsmooth
+  have hkc : HasCompactSupport (emeraldWeilTest K) :=
+    emeraldWeilTest_hasCompactSupport K hKcompact
+  exact (zeta23_explicit_formula_available (emeraldWeilTest K) hk2 hkc).1
+
 theorem emeraldExplicitBalance_from_zeta23
     (K : Real → Real)
     (hKsmooth : ContDiff Real ∞ K)
