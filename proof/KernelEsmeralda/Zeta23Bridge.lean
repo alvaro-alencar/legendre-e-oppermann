@@ -2,7 +2,7 @@ import Zeta23.Statement.SeamClosed
 import Zeta23.WeilEF.Main
 import KernelEsmeralda.SpectralWitness
 
-open scoped BigOperators
+open scoped BigOperators ContDiff
 
 namespace KernelEsmeralda
 
