@@ -38,3 +38,4 @@ import KernelEsmeralda.PrimePowerExact
 import KernelEsmeralda.ThetaUnitStep
 import KernelEsmeralda.PrimePowerRootGap
 import KernelEsmeralda.ThetaShortInterval
+import KernelEsmeralda.PrimePowerExponentBound
