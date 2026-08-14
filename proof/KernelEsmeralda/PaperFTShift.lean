@@ -33,7 +33,6 @@ theorem paperFT_mul_exp_half
   have harg :
       Complex.I * (z - Complex.I / 2) * (u : Complex) =
         ((u / 2 : Real) : Complex) + Complex.I * z * (u : Complex) := by
-    push_cast
     calc
       Complex.I * (z - Complex.I / 2) * (u : Complex)
           = (Complex.I * z - (Complex.I * Complex.I) / 2) * (u : Complex) := by ring
@@ -41,7 +40,7 @@ theorem paperFT_mul_exp_half
         rw [Complex.I_mul_I]
         ring
       _ = ((u / 2 : Real) : Complex) + Complex.I * z * (u : Complex) := by
-        push_cast
+        norm_num
         ring
   rw [harg, Complex.exp_add, ← Complex.ofReal_exp]
   ring
