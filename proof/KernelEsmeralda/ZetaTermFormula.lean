@@ -12,7 +12,6 @@ theorem gammaOf_sub_half_I (rho : Complex) :
   unfold Zeta23.gammaOf
   field_simp [Complex.I_ne_zero]
   simp [pow_two, Complex.I_mul_I]
-  ring
 
 theorem I_mul_gammaOf_sub_half_I (rho : Complex) :
     Complex.I * (Zeta23.gammaOf rho - Complex.I / 2) = rho := by
