@@ -21,3 +21,4 @@ import KernelEsmeralda.LinearCore
 import KernelEsmeralda.LinearCoreBudget
 import KernelEsmeralda.LinearCoreWitness
 import KernelEsmeralda.SpectralBudget
+import KernelEsmeralda.SpectralWitness
