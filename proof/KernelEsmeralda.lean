@@ -33,3 +33,4 @@ import KernelEsmeralda.EmeraldTaperFourier
 import KernelEsmeralda.ZetaTermFormula
 import KernelEsmeralda.ZetaTermBound
 import KernelEsmeralda.ZetaTermMagnitude
+import KernelEsmeralda.TaperConstants
