@@ -28,3 +28,5 @@ import KernelEsmeralda.GammaBridge
 import KernelEsmeralda.EmeraldTaper
 import KernelEsmeralda.WeilC2Bridge
 import KernelEsmeralda.PaperFTShift
+import KernelEsmeralda.ExplicitTaperTarget
+import KernelEsmeralda.EmeraldTaperFourier
