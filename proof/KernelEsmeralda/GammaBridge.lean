@@ -1,5 +1,8 @@
 import Zeta23.ExplicitFormula.Bridge
+import Zeta23.GammaFacts.Complete
 import KernelEsmeralda.ZetaTarget
+
+open scoped ContDiff
 
 namespace KernelEsmeralda
 
@@ -23,6 +26,19 @@ theorem emeraldGammaTerm_eq_mu_integral (K : Real → Real) :
   unfold emeraldGammaBracket Zeta23.mu
   push_cast
   ring
+
+theorem emeraldGammaIntegrand_integrable
+    (K : Real → Real)
+    (hKsmooth : ContDiff Real ∞ K)
+    (hKcompact : HasCompactSupport K) :
+    MeasureTheory.Integrable
+      (fun r : Real => emeraldPaperFT K r * (Zeta23.mu r : Complex)) := by
+  have hk2 : ContDiff Real 2 (emeraldWeilTest K) :=
+    emeraldWeilTest_contDiff_two K hKsmooth
+  have hkc : HasCompactSupport (emeraldWeilTest K) :=
+    emeraldWeilTest_hasCompactSupport K hKcompact
+  simpa [emeraldPaperFT, Zeta23.paperFT] using
+    Zeta23.EF.integrable_paperFT_mul_mu hk2 hkc Zeta23.gammaFacts
 
 end
 end KernelEsmeralda
