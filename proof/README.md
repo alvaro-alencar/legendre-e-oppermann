@@ -1,23 +1,24 @@
 # Kernel de Esmeralda em Lean
 
-Esta pasta transforma a tentativa sobre a Conjectura de Legendre em uma cadeia de lemas auditáveis. O CI instala Lean/Lake e executa `lake build` no pull request.
+Esta pasta transforma o programa de ataque à Conjectura de Legendre em uma cadeia de lemas auditáveis. O CI instala Lean/Lake e executa `lake build` no pull request.
 
 ## Estado formal atual
 
-A formalização usa `Chebyshev.psi`, `Chebyshev.theta` e a função de von Mangoldt da Mathlib. Já estão kernel-checked:
+A formalização usa `Chebyshev.psi`, `Chebyshev.theta` e a função de von Mangoldt da Mathlib. Entre os passos já kernel-checked estão:
 
 - `Δψ = Δθ + Δ(ψ-θ)`;
 - `Δθ > 0` implica um primo estritamente entre `n²` e `(n+1)²`;
 - `Δψ(n)` é exatamente a soma de von Mangoldt em `(n²,(n+1)²]`;
 - `ψ(n+1)-ψ(n)=Λ(n+1)≤log(n+1)`;
 - as desigualdades de Costa–Pereira dão uma cota local explícita para a contribuição das potências superiores;
-- para um peso `K≤1`, a massa ponderada `emeraldMass(K,n)` satisfaz `emeraldMass(K,n)≤Δψ(n)`;
-- existe um minorante `C∞`, entre `0` e `1`, suportado estritamente em `(log n², log (n+1)²)`;
+- para `K≤1`, `emeraldMass(K,n)≤Δψ(n)`;
+- existem minorantes suaves, entre `0` e `1`, com suporte estritamente em `(log n², log (n+1)²)`;
 - com `k(u)=exp(u/2)K(u)`, o fator `1/√m` do lado primo de Weil cancela exatamente;
-- o teste complexo resultante é `C²` e de suporte compacto;
-- o ramo refletido `k(-log m)` é zero e a soma prima infinita inteira na normalização de Weil reduz-se exatamente a `emeraldMass`.
+- o teste complexo é `C²` e de suporte compacto;
+- a soma prima infinita na normalização de Weil reduz-se exatamente a `emeraldMass`;
+- pode-se escolher um núcleo interno cuja contribuição exponencial é exatamente `n`, produzindo a cota `n ≤ Re(P_K)` para o termo dos polos.
 
-## Barreira explícita
+## Barreira aritmética explícita
 
 Definimos
 
@@ -34,10 +35,25 @@ B(n) < emeraldMass(K,n)
     ⇒ existe primo p com n² < p < (n+1)².
 ```
 
-## Gargalo atual
+## Fórmula explícita concreta da zeta
 
-A camada aritmética e o lado primo estão isolados. O passo difícil restante é aplicar uma fórmula explícita de Weil ao teste esmeralda e controlar rigorosamente o lado espectral/arquimediano para obter uma cota inferior que force `emeraldMass(K,n) > B(n)`.
+O pacote fixa como dependência o repositório público `anthropics/zeta-23-lean` no commit
+`3635e74826a4c1fcece7d1cd2b6fa75e43a00510`, usando a mesma revisão da Mathlib.
 
-A infraestrutura pública de `zeta-23-lean` contém uma fórmula explícita de Weil para a zeta e usa a mesma revisão da Mathlib, mas ainda não foi incorporada como dependência deste pacote.
+`Zeta23Bridge.lean` importa a instância sem hipóteses `EF_lit zetaZeroConfig` e prova que ela produz exatamente o balanço usado pelo Kernel de Esmeralda. Também expõe a convergência absoluta da série de zeros para o nosso teste.
 
-Nada nesta pasta afirma que a Conjectura de Legendre foi provada.
+Assim, a fórmula explícita deixou de ser uma hipótese própria deste projeto.
+
+## Fronteira atual
+
+Para cada `n ≥ 2`, o Lean já constrói um peso admissível `K` para o qual basta provar a desigualdade concreta
+
+```text
+B(n) - n < Re(G_K - Z_K),
+```
+
+onde `G_K` é o termo arquimediano e `Z_K` é a soma, com multiplicidades, sobre os zeros não triviais reais da função zeta de Riemann na formalização do `Zeta23`.
+
+Esse é agora o gargalo matemático. A próxima fase é obter estimativas quantitativas para `G_K` e, sobretudo, cancelamento suficiente em `Z_K`. Convergência absoluta por si só não fornece esse cancelamento.
+
+Nada nesta pasta afirma que a Conjectura de Legendre foi provada. A finalidade é tornar explícito, kernel-check após kernel-check, exatamente o que já foi demonstrado e o que ainda falta.
