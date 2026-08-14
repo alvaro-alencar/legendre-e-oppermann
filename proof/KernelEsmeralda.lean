@@ -35,3 +35,6 @@ import KernelEsmeralda.ZetaTermBound
 import KernelEsmeralda.ZetaTermMagnitude
 import KernelEsmeralda.TaperConstants
 import KernelEsmeralda.PrimePowerExact
+import KernelEsmeralda.ThetaUnitStep
+import KernelEsmeralda.PrimePowerRootGap
+import KernelEsmeralda.ThetaShortInterval
