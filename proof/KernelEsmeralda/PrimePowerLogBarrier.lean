@@ -44,7 +44,6 @@ theorem higherPowerRemainderDelta_le_countBarrier
           have hcardNat : (Icc 2 (higherPowerExponentCutoff n)).card ≤
               higherPowerExponentCutoff n := by
             simp
-            omega
           exact_mod_cast hcardNat
     _ = primePowerCountBarrier n := rfl
 
@@ -77,7 +76,6 @@ theorem higherPowerRemainderDelta_le_logBarrier
             Real.log (upperSquare n) := hmul
     _ = (Real.log (upperSquare n)) ^ 2 / Real.log 2 := by
       field_simp [hlog2]
-      ring
 
 end
 end KernelEsmeralda
