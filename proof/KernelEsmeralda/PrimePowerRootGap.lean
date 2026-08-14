@@ -10,7 +10,7 @@ private theorem square_rpow_inv_nat_eq
     (a ^ (2 : Nat)) ^ ((1 : Real) / k) =
       a ^ ((2 : Real) / k) := by
   rw [← Real.rpow_natCast]
-  rw [Real.rpow_mul ha]
+  rw [← Real.rpow_mul ha]
   congr 1
   ring
 
