@@ -31,3 +31,4 @@ import KernelEsmeralda.PaperFTShift
 import KernelEsmeralda.ExplicitTaperTarget
 import KernelEsmeralda.EmeraldTaperFourier
 import KernelEsmeralda.ZetaTermFormula
+import KernelEsmeralda.ZetaTermBound
