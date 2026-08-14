@@ -21,13 +21,16 @@ theorem theta_sub_le_log_of_floor_le_succ
     linarith
   · have hab : a < b := Nat.lt_of_not_ge hba
     have hEq : b = a + 1 := by omega
-    subst b
     have hstep := theta_nat_succ_sub_le_log a
     have hy0 : 0 ≤ y := le_trans (by norm_num) hy1
+    have hfloor_raw : ((⌊y⌋₊ : Nat) : Real) ≤ y := Nat.floor_le hy0
     have hfloorY : (((a + 1 : Nat) : Real)) ≤ y := by
-      simpa [a] using (Nat.floor_le hy0 : ((⌊y⌋₊ : Nat) : Real) ≤ y)
+      rw [← hEq]
+      change (b : Real) ≤ y
+      simpa [b] using hfloor_raw
     have hlogmono : Real.log (((a + 1 : Nat) : Real)) ≤ Real.log y := by
       exact Real.log_le_log (by positivity) hfloorY
+    rw [hEq]
     exact hstep.trans hlogmono
 
 end
