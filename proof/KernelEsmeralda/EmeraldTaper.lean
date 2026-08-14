@@ -85,11 +85,9 @@ theorem emeraldTaperWeight_eq_one_on_linear_core
     exact min_le_right _ _
   rw [abs_le]
   constructor
-  · rw [emeraldTaper_center_sub_half_length] at *
-    unfold emeraldTaperLength emeraldTaperCenter
+  · unfold emeraldTaperLength emeraldTaperCenter
     linarith [hu.1]
-  · rw [emeraldTaper_center_add_half_length] at *
-    unfold emeraldTaperLength emeraldTaperCenter
+  · unfold emeraldTaperLength emeraldTaperCenter
     linarith [hu.2]
 
 theorem emeraldTaperWeight_support
