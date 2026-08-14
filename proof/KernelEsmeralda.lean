@@ -26,3 +26,5 @@ import KernelEsmeralda.Zeta23Bridge
 import KernelEsmeralda.ZetaTarget
 import KernelEsmeralda.GammaBridge
 import KernelEsmeralda.EmeraldTaper
+import KernelEsmeralda.WeilC2Bridge
+import KernelEsmeralda.PaperFTShift
