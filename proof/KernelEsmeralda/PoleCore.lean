@@ -39,6 +39,7 @@ theorem emeraldCore_exp_weight_integral
       apply intervalIntegral.integral_congr
       intro u hu
       rw [uIcc_of_le horder] at hu
+      change Real.exp u * K u = Real.exp u
       rw [hcore u hu, mul_one]
     _ = Real.exp (emeraldCoreRight n) - Real.exp (emeraldCoreLeft n) := by simp
 
