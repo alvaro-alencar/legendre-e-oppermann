@@ -25,7 +25,8 @@ theorem exists_zeta_dyadic_count_upper :
     have hT1 : T₁ ≤ T := le_trans (le_max_left _ _) hT
     have hexp : Real.exp 1 ≤ T := le_trans (le_max_right _ _) hT
     have hexp1 : (1 : Real) ≤ Real.exp 1 := by
-      linarith [Real.exp_one_lt_d9]
+      have h := Real.add_one_le_exp (1 : Real)
+      linarith
     have hTone : (1 : Real) ≤ T := le_trans hexp1 hexp
     have hTpos : 0 < T := lt_of_lt_of_le zero_lt_one hTone
     have hlog1 : 1 ≤ Real.log T := by
@@ -72,8 +73,9 @@ theorem exists_zeta_dyadic_count_upper :
         ((Zeta23.zetaZeroConfig.N T (2 * T) : Real) -
           T / (2 * Real.pi) * Zeta23.ell1 T)
       linarith
-    have hscale : Real.log T ≤ T * Real.log T :=
-      mul_le_mul_of_nonneg_right hTone hlog0
+    have hscale' := mul_le_mul_of_nonneg_right hTone hlog0
+    have hscale : Real.log T ≤ T * Real.log T := by
+      simpa using hscale'
     have herrscale : |C| * Real.log T ≤ |C| * (T * Real.log T) :=
       mul_le_mul_of_nonneg_left hscale (abs_nonneg C)
     calc
@@ -81,7 +83,7 @@ theorem exists_zeta_dyadic_count_upper :
           ≤ T / (2 * Real.pi) * Zeta23.ell1 T + |C| * Real.log T := hN
       _ ≤ T * Real.log T + |C| * Real.log T := by linarith
       _ ≤ T * Real.log T + |C| * (T * Real.log T) := by
-        exact add_le_add_left herrscale (T * Real.log T)
+        nlinarith [herrscale]
       _ = B * T * Real.log T := by
         unfold B
         ring
