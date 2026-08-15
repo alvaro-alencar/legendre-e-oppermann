@@ -25,8 +25,10 @@ theorem carrierFinsetToComplex_sum_mult
     (s : Finset Zeta23.zetaZeroConfig.carrier) :
     (∑ rho ∈ carrierFinsetToComplex s, Zeta23.zetaZeroConfig.mult rho) =
       ∑ rho ∈ s, Zeta23.zetaZeroConfig.mult rho := by
-  unfold carrierFinsetToComplex zetaCarrierEmbedding
-  simp
+  classical
+  unfold carrierFinsetToComplex
+  rw [Finset.sum_map]
+  rfl
 
 /-- Any finite collection of actual zeros in the dyadic window has total
 multiplicity at most the concrete Riemann-zeta count N(T,2T). -/
@@ -59,8 +61,7 @@ theorem dyadic_finset_mult_le_N
     rw [finsum_mem_eq_finite_toFinset_sum _
       (Zeta23.zetaZeroConfig.window_finite T (2 * T))]
     rfl
-  rw [hN]
-  exact hsum
+  simpa [hN] using hsum
 
 theorem dyadic_finset_mult_real_le_N
     (T : Real) (s : Finset Zeta23.zetaZeroConfig.carrier)
