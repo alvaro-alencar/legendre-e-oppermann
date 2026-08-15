@@ -97,5 +97,27 @@ theorem zeta23_fixed_lambda_weilTest_zero_at_square_scale
   have hL := zeta23_fixed_lambda_L_lt_emeraldLogLeft_of_gap P n hn1 hgap
   exact weilTest_eq_zero_of_support_right hfs hgs (lt_trans hL hx)
 
+/-- Eventual form of the fixed-lambda obstruction.  Every single fixed
+parameter with λ<1 has a finite threshold after which its square-scale support
+ends strictly before the Legendre logarithmic window. -/
+theorem exists_zeta23_fixed_lambda_square_scale_threshold
+    (P : Zeta23.Params) (hP : P.Valid) (hlam : P.lam < 1) :
+    ∃ N : Nat, 2 ≤ N ∧ ∀ n : Nat, N ≤ n →
+      P.L (2 * Real.pi * upperSquare n) < emeraldLogLeft n := by
+  obtain ⟨M, hM⟩ := exists_nat_gt
+    (2 / ((1 - P.lam) * Real.log 4) : Real)
+  let N : Nat := max 2 M
+  refine ⟨N, ?_, ?_⟩
+  · exact le_max_left 2 M
+  · intro n hnN
+    have h2n : 2 ≤ n := le_trans (le_max_left 2 M) hnN
+    have hMn : M ≤ n := le_trans (le_max_right 2 M) hnN
+    have hlarge :
+        2 / ((1 - P.lam) * Real.log 4) < (n : Real) := by
+      exact lt_of_lt_of_le hM (by exact_mod_cast hMn)
+    have hn1 : 1 ≤ n := le_trans (by decide : 1 ≤ 2) h2n
+    have hgap := zeta23_fixed_lambda_gap_of_large_n P hP hlam n hn1 hlarge
+    exact zeta23_fixed_lambda_L_lt_emeraldLogLeft_of_gap P n hn1 hgap
+
 end
 end KernelEsmeralda
