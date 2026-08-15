@@ -24,7 +24,10 @@ theorem legendre_of_split_emerald_remainder
   apply legendre_of_explicit_emerald_taper_log_remainder n hn
   unfold emeraldSpectralRemainder
   rw [hsplit]
-  simp only [map_sub, map_add]
+  change primePowerLogBarrier n - (n : Real) <
+    (emeraldGammaTerm (emeraldTaperWeight n)).re -
+      ((emeraldZetaOnLineZeroSum (emeraldTaperWeight n)).re +
+       (emeraldZetaOffLineZeroSum (emeraldTaperWeight n)).re)
   linarith
 
 end
