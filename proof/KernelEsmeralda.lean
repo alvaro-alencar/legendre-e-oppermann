@@ -46,3 +46,4 @@ import KernelEsmeralda.ExplicitLogTarget
 import KernelEsmeralda.CriticalLineTaperBound
 import KernelEsmeralda.CriticalLineUniformBound
 import KernelEsmeralda.ZetaLineSplit
+import KernelEsmeralda.TaperWidthLower
