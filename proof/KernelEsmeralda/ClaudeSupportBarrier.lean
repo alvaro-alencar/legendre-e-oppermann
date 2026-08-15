@@ -49,7 +49,8 @@ theorem zeta23_valid_L_at_n_lt_emeraldLogLeft
   by_cases hl : 0 ≤ Zeta23.l (n : Real)
   · have hLle : P.L (n : Real) ≤ Zeta23.l (n : Real) := by
       unfold Zeta23.Params.L
-      exact mul_le_mul_of_nonneg_right hP.lam_le_one hl
+      have hmul := mul_le_mul_of_nonneg_right hP.lam_le_one hl
+      simpa using hmul
     linarith
   · have hlneg : Zeta23.l (n : Real) < 0 := lt_of_not_ge hl
     have hLneg : P.L (n : Real) < 0 := by
