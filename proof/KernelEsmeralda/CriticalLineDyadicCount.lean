@@ -8,16 +8,24 @@ namespace KernelEsmeralda
 
 noncomputable section
 
+/-- The coercion from an actual zeta zero to its underlying complex number,
+packaged as a Finset embedding. -/
+def zetaCarrierEmbedding : Zeta23.zetaZeroConfig.carrier ↪ Complex where
+  toFun := fun rho => (rho : Complex)
+  inj' := by
+    intro a b h
+    exact Subtype.ext h
+
 /-- Forget the carrier subtype while preserving a finite collection of actual zeta zeros. -/
 def carrierFinsetToComplex
     (s : Finset Zeta23.zetaZeroConfig.carrier) : Finset Complex :=
-  s.map ⟨fun rho => (rho : Complex), Subtype.val_injective⟩
+  s.map zetaCarrierEmbedding
 
 theorem carrierFinsetToComplex_sum_mult
     (s : Finset Zeta23.zetaZeroConfig.carrier) :
     (∑ rho ∈ carrierFinsetToComplex s, Zeta23.zetaZeroConfig.mult rho) =
       ∑ rho ∈ s, Zeta23.zetaZeroConfig.mult rho := by
-  unfold carrierFinsetToComplex
+  unfold carrierFinsetToComplex zetaCarrierEmbedding
   simp
 
 /-- Any finite collection of actual zeros in the dyadic window has total
@@ -34,7 +42,8 @@ theorem dyadic_finset_mult_le_N
     intro rho hrho
     unfold carrierFinsetToComplex at hrho
     rw [Finset.mem_map] at hrho
-    obtain ⟨r, hrs, rfl⟩ := hrho
+    obtain ⟨r, hrs, hr⟩ := hrho
+    subst rho
     unfold wfin
     rw [Set.Finite.mem_toFinset]
     exact ⟨r.property, (hs r hrs).1, (hs r hrs).2⟩
@@ -46,9 +55,10 @@ theorem dyadic_finset_mult_le_N
   have hN :
       Zeta23.zetaZeroConfig.N T (2 * T) =
         ∑ rho ∈ wfin, Zeta23.zetaZeroConfig.mult rho := by
-    unfold Zeta23.ZeroConfig.N wfin
+    unfold Zeta23.ZeroConfig.N
     rw [finsum_mem_eq_finite_toFinset_sum _
       (Zeta23.zetaZeroConfig.window_finite T (2 * T))]
+    rfl
   rw [hN]
   exact hsum
 
