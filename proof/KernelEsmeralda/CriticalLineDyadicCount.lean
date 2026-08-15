@@ -60,7 +60,6 @@ theorem dyadic_finset_mult_le_N
     unfold Zeta23.ZeroConfig.N
     rw [finsum_mem_eq_finite_toFinset_sum _
       (Zeta23.zetaZeroConfig.window_finite T (2 * T))]
-    rfl
   simpa [hN] using hsum
 
 theorem dyadic_finset_mult_real_le_N
