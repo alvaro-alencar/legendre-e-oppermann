@@ -57,10 +57,17 @@ theorem emeraldNormalizedFrequency_lt_one_at_upperSquare
   have hcenterlt : emeraldTaperCenter n < emeraldLogRight n := by
     unfold emeraldTaperCenter
     linarith
+  have hsR : (1 : Real) < (((n + 1 : Nat) : Real)) := by
+    exact_mod_cast (lt_trans Nat.one_lt_two (Nat.lt_succ_of_le hn))
+  have hs0 : (0 : Real) ≤ (((n + 1 : Nat) : Real)) :=
+    le_trans (by norm_num : (0 : Real) ≤ 1) hsR.le
+  have hsq :
+      (1 : Real) * 1 <
+        (((n + 1 : Nat) : Real)) * (((n + 1 : Nat) : Real)) :=
+    mul_lt_mul hsR hsR (by norm_num) hs0
   have hu : (1 : Real) < upperSquare n := by
-    have hnR : (2 : Real) ≤ (n : Real) := by exact_mod_cast hn
     unfold upperSquare
-    nlinarith
+    simpa [pow_two] using hsq
   have hlogpos : 0 < Real.log (upperSquare n) := Real.log_pos hu
   unfold emeraldLogRight at hcenterlt
   rw [div_lt_iff₀ hlogpos]
