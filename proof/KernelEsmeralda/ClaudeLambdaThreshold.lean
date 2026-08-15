@@ -118,5 +118,25 @@ theorem emeraldClaudeLambdaMin_ge_one_sub_explicit
         field_simp [hnR.ne', hlog4.ne']
   linarith
 
+/-- The endpoint `λ = 1` exactly reaches the right logarithmic endpoint at the
+square spectral scale.  Thus the fixed-λ obstruction above is genuinely an
+obstruction to staying *below* the endpoint, not to the endpoint geometry itself. -/
+theorem zeta23_endpoint_square_scale_L_eq_right
+    (P : Zeta23.Params) (hLam : P.lam = 1) (n : Nat) :
+    P.L (2 * Real.pi * upperSquare n) = emeraldLogRight n := by
+  rw [zeta23_L_at_two_pi_upperSquare, hLam, one_mul]
+
+/-- In particular every point of the open Legendre logarithmic window lies
+strictly inside the positive support radius available at `λ = 1` and
+`T = 2π(n+1)^2`.  This is only a support statement; it does not assert that a
+particular Weil convolution is nonzero there. -/
+theorem zeta23_endpoint_square_scale_window_inside_radius
+    (P : Zeta23.Params) (hLam : P.lam = 1)
+    (n : Nat) {x : Real}
+    (hx : x < emeraldLogRight n) :
+    x < P.L (2 * Real.pi * upperSquare n) := by
+  rw [zeta23_endpoint_square_scale_L_eq_right P hLam n]
+  exact hx
+
 end
 end KernelEsmeralda
