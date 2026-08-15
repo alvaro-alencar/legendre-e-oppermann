@@ -59,3 +59,5 @@ import KernelEsmeralda.ZetaDyadicCountUpper
 import KernelEsmeralda.CriticalLineDyadicRvM
 import KernelEsmeralda.CriticalLineLogLoss
 import KernelEsmeralda.CriticalLinePhase
+import KernelEsmeralda.CriticalLineConjugation
+import KernelEsmeralda.CriticalLineFrequency
