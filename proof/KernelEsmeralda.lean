@@ -64,6 +64,7 @@ import KernelEsmeralda.CriticalLineFrequency
 import KernelEsmeralda.CriticalLineBandwidthThreshold
 import KernelEsmeralda.BandwidthTwoTarget
 import KernelEsmeralda.CriticalLineProductScale
+import KernelEsmeralda.ResearchFrontier
 import KernelEsmeralda.ClaudeTwoThirdsBridge
 import KernelEsmeralda.ClaudeOffLineCount
 import KernelEsmeralda.OffLineBetaBound
