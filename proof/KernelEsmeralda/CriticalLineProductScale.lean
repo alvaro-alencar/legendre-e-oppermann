@@ -36,7 +36,8 @@ theorem exists_emeraldCriticalProductScaleLogBound :
   have hTone : (1 : Real) ≤ T := by
     unfold T
     have hnR : (1 : Real) ≤ (n : Real) := by exact_mod_cast hn
-    have hsR : (1 : Real) ≤ (((n + 1 : Nat) : Real)) := by positivity
+    have hsR : (1 : Real) ≤ (((n + 1 : Nat) : Real)) := by
+      exact_mod_cast Nat.succ_le_succ (Nat.zero_le n)
     nlinarith
   have hlog0 : 0 ≤ Real.log T := Real.log_nonneg hTone
   have h := hdyadic n hn T hT s (by
@@ -54,7 +55,6 @@ theorem exists_emeraldCriticalProductScaleLogBound :
           ((n : Real) / (((n + 1 : Nat) : Real))) := by
       unfold T
       field_simp [hnpos.ne', hspos.ne']
-      ring
     _ ≤ (D * Real.log T) * 1 :=
       mul_le_mul_of_nonneg_left hratio hcoef
     _ = D * Real.log ((n : Real) * (((n + 1 : Nat) : Real))) := by
