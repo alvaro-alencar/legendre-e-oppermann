@@ -51,3 +51,4 @@ import KernelEsmeralda.CriticalLineDecay
 import KernelEsmeralda.CriticalLineLocalCount
 import KernelEsmeralda.CriticalLineWindowBound
 import KernelEsmeralda.CriticalLineOrdinateDecay
+import KernelEsmeralda.CriticalLineWindowDecay
