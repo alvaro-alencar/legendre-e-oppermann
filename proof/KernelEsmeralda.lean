@@ -63,3 +63,4 @@ import KernelEsmeralda.CriticalLineConjugation
 import KernelEsmeralda.CriticalLineFrequency
 import KernelEsmeralda.ClaudeTwoThirdsBridge
 import KernelEsmeralda.ClaudeOffLineCount
+import KernelEsmeralda.OffLineBetaBound
