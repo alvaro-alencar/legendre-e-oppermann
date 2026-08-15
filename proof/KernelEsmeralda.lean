@@ -41,3 +41,6 @@ import KernelEsmeralda.ThetaShortInterval
 import KernelEsmeralda.PrimePowerExponentBound
 import KernelEsmeralda.PrimePowerLogBarrier
 import KernelEsmeralda.LogBarrierCriterion
+import KernelEsmeralda.LogSpectralBudget
+import KernelEsmeralda.ExplicitLogTarget
+import KernelEsmeralda.CriticalLineTaperBound
