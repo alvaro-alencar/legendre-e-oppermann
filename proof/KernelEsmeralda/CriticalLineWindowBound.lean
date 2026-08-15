@@ -28,7 +28,16 @@ theorem norm_emeraldCriticalExplicitTerm_le_four_mult
       (Zeta23.zetaZeroConfig.mult rho : Real) := by simp
   rw [hmult]
   have hfactor := emerald_zero_kernel_factor_bound_four_on_critical_line n hn rho hrho
-  exact mul_le_mul_of_nonneg_left hfactor (Nat.cast_nonneg _)
+  have hm0 : 0 ≤ (Zeta23.zetaZeroConfig.mult rho : Real) := Nat.cast_nonneg _
+  calc
+    (Zeta23.zetaZeroConfig.mult rho : Real) *
+        ‖Complex.exp ((rho : Complex) * (emeraldTaperCenter n : Complex)) *
+          Zeta23.Taper.phiHat Zeta23.Taper.smoothstep
+            (emeraldTaperLength n) (emeraldTaperWidth n)
+            (-Complex.I * (rho : Complex))‖
+      ≤ (Zeta23.zetaZeroConfig.mult rho : Real) * 4 :=
+        mul_le_mul_of_nonneg_left hfactor hm0
+    _ = 4 * (Zeta23.zetaZeroConfig.mult rho : Real) := by ring
 
 /-- A unit-height block of critical-line zeros is controlled by the concrete
 Riemann--von Mangoldt local count.  The constant A₀ is absolute and comes from
