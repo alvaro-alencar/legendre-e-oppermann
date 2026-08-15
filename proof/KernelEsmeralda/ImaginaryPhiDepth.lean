@@ -1,5 +1,5 @@
 import Zeta23.Taper
-import Mathlib.Analysis.SpecialFunctions.Arccosh
+import Mathlib.Analysis.SpecialFunctions.Arcosh
 
 open Complex MeasureTheory Real Set Filter Topology
 
