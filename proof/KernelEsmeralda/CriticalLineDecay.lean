@@ -31,8 +31,10 @@ theorem emeraldTaper_C1_le_eight_mul_n
       _ ≤ (4 * (n : Real)) * emeraldTaperWidth n := hm
   rw [emeraldTaper_C1_exact n hn]
   rw [div_le_iff₀ hwpos]
-  have hA : 0 ≤ 2 * Zeta23.Taper.l1Deriv2 Zeta23.Taper.smoothstep := by
-    positivity
+  have hA0 : 0 ≤ Zeta23.Taper.l1Deriv2 Zeta23.Taper.smoothstep :=
+    smoothstep_l1Deriv2_nonneg
+  have hA : 0 ≤ 2 * Zeta23.Taper.l1Deriv2 Zeta23.Taper.smoothstep :=
+    mul_nonneg (by norm_num) hA0
   have hm := mul_le_mul_of_nonneg_left hscale hA
   calc
     2 * Zeta23.Taper.l1Deriv2 Zeta23.Taper.smoothstep
@@ -73,12 +75,22 @@ theorem emerald_zero_kernel_factor_mul_sq_le_on_critical_line
             Zeta23.Taper.C1 Zeta23.Taper.smoothstep
               (emeraldTaperLength n) (emeraldTaperWidth n)) :=
         mul_le_mul_of_nonneg_left hphi hcenter
+    _ = Real.exp (emeraldTaperCenter n / 2) *
+          (Real.exp (emeraldTaperLength n / 4) *
+            Zeta23.Taper.C1 Zeta23.Taper.smoothstep
+              (emeraldTaperLength n) (emeraldTaperWidth n)) := by ring
+    _ = (Real.exp (emeraldTaperCenter n / 2) *
+          Real.exp (emeraldTaperLength n / 4)) *
+            Zeta23.Taper.C1 Zeta23.Taper.smoothstep
+              (emeraldTaperLength n) (emeraldTaperWidth n) := by ring
+    _ = Real.exp (emeraldTaperCenter n / 2 + emeraldTaperLength n / 4) *
+            Zeta23.Taper.C1 Zeta23.Taper.smoothstep
+              (emeraldTaperLength n) (emeraldTaperWidth n) := by
+          rw [Real.exp_add]
     _ = Real.exp (emeraldLogRight n / 2) *
           Zeta23.Taper.C1 Zeta23.Taper.smoothstep
             (emeraldTaperLength n) (emeraldTaperWidth n) := by
-      rw [show (1 / 2 : Real) * emeraldTaperCenter n = emeraldTaperCenter n / 2 by ring]
-      rw [show (1 / 2 : Real) * (emeraldTaperLength n / 2) = emeraldTaperLength n / 4 by ring]
-      rw [mul_assoc, ← Real.exp_add, emeraldTaper_center_half_add_length_quarter]
+          rw [emeraldTaper_center_half_add_length_quarter]
 
 theorem emerald_zero_kernel_factor_mul_sq_le_sixteen_n_sq
     (n : Nat) (hn : 1 ≤ n) (rho : Zeta23.zetaZeroConfig.carrier)
@@ -95,9 +107,12 @@ theorem emerald_zero_kernel_factor_mul_sq_le_sixteen_n_sq
     push_cast
     have hnR : (1 : Real) ≤ (n : Real) := by exact_mod_cast hn
     linarith
-  have hA : 0 ≤ 8 * Zeta23.Taper.l1Deriv2 Zeta23.Taper.smoothstep * (n : Real) := by
-    positivity
-  have hsucc0 : 0 ≤ (((n + 1 : Nat) : Real)) := by positivity
+  have hA0 : 0 ≤ Zeta23.Taper.l1Deriv2 Zeta23.Taper.smoothstep :=
+    smoothstep_l1Deriv2_nonneg
+  have hn0 : 0 ≤ (n : Real) := Nat.cast_nonneg n
+  have hA : 0 ≤ 8 * Zeta23.Taper.l1Deriv2 Zeta23.Taper.smoothstep * (n : Real) :=
+    mul_nonneg (mul_nonneg (by norm_num) hA0) hn0
+  have hsucc0 : 0 ≤ (((n + 1 : Nat) : Real)) := Nat.cast_nonneg (n + 1)
   calc
     ‖Complex.exp ((rho : Complex) * (emeraldTaperCenter n : Complex)) *
         Zeta23.Taper.phiHat Zeta23.Taper.smoothstep
