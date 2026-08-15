@@ -32,7 +32,7 @@ theorem nonnegative_kernel_pole_add_remainder_nonneg
       0 ≤ (emeraldPoleTerm H).re + (emeraldGammaTerm H).re - zeroSum.re := by
     simpa only [Complex.add_re, Complex.sub_re] using hmass
   unfold emeraldSpectralRemainder
-  linarith
+  simpa only [Complex.sub_re, sub_eq_add_neg, add_assoc] using hmass'
 
 /-- No-free-lunch form.  If a nonnegative correction `H` is subtracted from a
 baseline kernel, the increase `-R(H)` it can create in spectral remainder is
