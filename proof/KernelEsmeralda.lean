@@ -73,3 +73,4 @@ import KernelEsmeralda.OffLineNaturalScale
 import KernelEsmeralda.ClaudeWeightedOffLineRvM
 import KernelEsmeralda.ClaudeSupportBarrier
 import KernelEsmeralda.ClaudeSupportScaleBarrier
+import KernelEsmeralda.ClaudeFixedLambdaBarrier
