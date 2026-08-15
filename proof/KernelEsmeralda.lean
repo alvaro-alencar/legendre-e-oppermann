@@ -53,3 +53,4 @@ import KernelEsmeralda.CriticalLineWindowBound
 import KernelEsmeralda.CriticalLineOrdinateDecay
 import KernelEsmeralda.CriticalLineWindowDecay
 import KernelEsmeralda.SplitLogTarget
+import KernelEsmeralda.CriticalLineDyadicBlock
