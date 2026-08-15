@@ -44,3 +44,4 @@ import KernelEsmeralda.LogBarrierCriterion
 import KernelEsmeralda.LogSpectralBudget
 import KernelEsmeralda.ExplicitLogTarget
 import KernelEsmeralda.CriticalLineTaperBound
+import KernelEsmeralda.CriticalLineUniformBound
