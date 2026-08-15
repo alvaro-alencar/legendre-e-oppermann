@@ -69,3 +69,5 @@ import KernelEsmeralda.OffLineUnconditionalBound
 import KernelEsmeralda.OffLineDyadicBeta
 import KernelEsmeralda.OffLineFiniteCount
 import KernelEsmeralda.ClaudeWeightedOffLine
+import KernelEsmeralda.OffLineNaturalScale
+import KernelEsmeralda.ClaudeWeightedOffLineRvM
