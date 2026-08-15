@@ -63,7 +63,6 @@ theorem exists_claudeWeightedOffLineRvMBound
             (n : Real) * Real.log T / T := by
         unfold C D
         field_simp [ne_of_gt hTpos]
-        ring
 
 /-- At the natural difficult height T=n, Claude's theorem changes only the
 multiplicative off-line count factor; the beta amplification survives. -/
