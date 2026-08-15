@@ -34,10 +34,11 @@ theorem two_log_n_lt_emeraldTaperCenter
     2 * Real.log (n : Real) < emeraldTaperCenter n := by
   have hnpos : (0 : Real) < (n : Real) := by
     exact_mod_cast (lt_of_lt_of_le Nat.zero_lt_one hn)
+  have hspos : (0 : Real) < (((n + 1 : Nat) : Real)) := by positivity
   have hsucc : (n : Real) < (((n + 1 : Nat) : Real)) := by
     exact_mod_cast Nat.lt_succ_self n
   have hlog : Real.log (n : Real) < Real.log (((n + 1 : Nat) : Real)) :=
-    Real.strictMonoOn_log hsucc
+    Real.strictMonoOn_log hnpos hspos hsucc
   rw [emeraldTaperCenter_eq_log_add_log n hn]
   linarith
 
