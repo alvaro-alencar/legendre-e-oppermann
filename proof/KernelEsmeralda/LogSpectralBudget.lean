@@ -1,5 +1,6 @@
 import KernelEsmeralda.LogBarrierCriterion
 import KernelEsmeralda.ResearchTarget
+import KernelEsmeralda.SpectralBudget
 
 namespace KernelEsmeralda
 
