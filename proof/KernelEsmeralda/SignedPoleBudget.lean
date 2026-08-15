@@ -69,13 +69,13 @@ baseline pole floor `n`, if the correction costs at most `B` in real pole
 mass, then `n-B` remains available as the main-term floor. -/
 theorem legendre_of_signed_correction_spectral_budget
     (K H : Real → Real)
+    (n : Nat) (hn : 2 ≤ n)
     (hKle : ∀ u : Real, K u ≤ 1)
     (hHnonneg : ∀ u : Real, 0 ≤ H u)
     (hKsupp : Function.support K ⊆ Set.Ioo (emeraldLogLeft n) (emeraldLogRight n))
     (hHsupp : Function.support H ⊆ Set.Ioo (emeraldLogLeft n) (emeraldLogRight n))
     (hKcont : Continuous K) (hKcompact : HasCompactSupport K)
     (hHcont : Continuous H) (hHcompact : HasCompactSupport H)
-    (n : Nat) (hn : 2 ≤ n)
     (B : Real)
     (hbasePole : (n : Real) ≤ (emeraldPoleTerm K).re)
     (hcost : (emeraldPoleTerm H).re ≤ B)
