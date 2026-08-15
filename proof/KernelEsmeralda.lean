@@ -48,3 +48,4 @@ import KernelEsmeralda.CriticalLineUniformBound
 import KernelEsmeralda.ZetaLineSplit
 import KernelEsmeralda.TaperWidthLower
 import KernelEsmeralda.CriticalLineDecay
+import KernelEsmeralda.CriticalLineLocalCount
