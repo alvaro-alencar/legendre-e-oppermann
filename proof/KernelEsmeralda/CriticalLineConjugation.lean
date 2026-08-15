@@ -24,8 +24,9 @@ theorem isNontrivialZero_conj {rho : Complex}
   constructor
   · rw [Zeta23.riemannZeta_conj hne, hrho.1]
     simp
-  · simpa using hrho.2.1
-  · simpa using hrho.2.2
+  · constructor
+    · simpa using hrho.2.1
+    · simpa using hrho.2.2
 
 theorem zeroMult_conj_of_nontrivial {rho : Complex}
     (hrho : Zeta23.IsNontrivialZero rho) :
@@ -37,10 +38,9 @@ theorem zeroMult_conj_of_nontrivial {rho : Complex}
 def emeraldConjZero (rho : Zeta23.zetaZeroConfig.carrier) :
     Zeta23.zetaZeroConfig.carrier := by
   refine ⟨conj (rho : Complex), ?_⟩
-  rw [Zeta23.zetaZeroConfig_carrier]
   have hrho : Zeta23.IsNontrivialZero (rho : Complex) := by
     simpa [Zeta23.zetaZeroConfig_carrier] using rho.property
-  exact isNontrivialZero_conj hrho
+  simpa [Zeta23.zetaZeroConfig_carrier] using isNontrivialZero_conj hrho
 
 @[simp] theorem emeraldConjZero_val
     (rho : Zeta23.zetaZeroConfig.carrier) :
@@ -65,12 +65,14 @@ def emeraldConjZero (rho : Zeta23.zetaZeroConfig.carrier) :
 @[simp] theorem emeraldConjZero_re
     (rho : Zeta23.zetaZeroConfig.carrier) :
     ((emeraldConjZero rho : Zeta23.zetaZeroConfig.carrier) : Complex).re =
-      (rho : Complex).re := by simp [emeraldConjZero]
+      (rho : Complex).re := by
+  simp [emeraldConjZero]
 
 @[simp] theorem emeraldConjZero_im
     (rho : Zeta23.zetaZeroConfig.carrier) :
     ((emeraldConjZero rho : Zeta23.zetaZeroConfig.carrier) : Complex).im =
-      -(rho : Complex).im := by simp [emeraldConjZero]
+      -(rho : Complex).im := by
+  simp [emeraldConjZero]
 
 theorem emerald_phiHat_conj_zero
     (n : Nat) (rho : Zeta23.zetaZeroConfig.carrier) :
@@ -90,9 +92,18 @@ theorem emerald_phiHat_conj_zero
     Zeta23.Taper.phiHat Zeta23.Taper.smoothstep
       (emeraldTaperLength n) (emeraldTaperWidth n)
       (-conj (-Complex.I * (rho : Complex))) at h
-  rw [← h]
-  congr 1
-  simp [emeraldConjZero]
+  calc
+    Zeta23.Taper.phiHat Zeta23.Taper.smoothstep
+        (emeraldTaperLength n) (emeraldTaperWidth n)
+        (-Complex.I * (emeraldConjZero rho : Complex)) =
+      Zeta23.Taper.phiHat Zeta23.Taper.smoothstep
+        (emeraldTaperLength n) (emeraldTaperWidth n)
+        (-conj (-Complex.I * (rho : Complex))) := by
+          congr 1
+          simp [emeraldConjZero]
+    _ = conj (Zeta23.Taper.phiHat Zeta23.Taper.smoothstep
+        (emeraldTaperLength n) (emeraldTaperWidth n)
+        (-Complex.I * (rho : Complex))) := h.symm
 
 theorem emerald_exp_conj_zero
     (n : Nat) (rho : Zeta23.zetaZeroConfig.carrier) :
