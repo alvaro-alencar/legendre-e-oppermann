@@ -65,3 +65,4 @@ import KernelEsmeralda.ClaudeTwoThirdsBridge
 import KernelEsmeralda.ClaudeOffLineCount
 import KernelEsmeralda.OffLineBetaBound
 import KernelEsmeralda.OffLineUnconditionalBound
+import KernelEsmeralda.OffLineDyadicBeta
