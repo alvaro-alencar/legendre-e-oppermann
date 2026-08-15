@@ -62,7 +62,6 @@ theorem zeta23_square_scale_reaches_left_iff
   unfold emeraldClaudeLambdaMin
   have hR := emeraldLogRight_pos_of_two n hn
   rw [div_le_iff₀ hR]
-  exact Iff.rfl
 
 /-- The distance from the endpoint bandwidth `1` is exactly the Legendre
 logarithmic window length divided by its right endpoint. -/
@@ -73,7 +72,6 @@ theorem one_sub_emeraldClaudeLambdaMin
   have hRne := (emeraldLogRight_pos_of_two n hn).ne'
   unfold emeraldClaudeLambdaMin emeraldTaperLength
   field_simp [hRne]
-  ring
 
 /-- Quantitative squeeze: the bandwidth deficit is at most the elementary
 window-length bound `2/n`, divided by the positive right logarithmic endpoint. -/
