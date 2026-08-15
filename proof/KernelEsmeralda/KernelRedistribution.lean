@@ -69,7 +69,7 @@ theorem headroom_correction_nonpos_on_emerald_linear_core
     {u : Real}
     (hu : u ∈ Icc (emeraldLinearCoreLeft n) (emeraldLinearCoreRight n)) :
     C u ≤ 0 := by
-  have hOne := emeraldTaperWeight_eq_one_on_linear_core n hn u hu
+  have hOne := emeraldTaperWeight_eq_one_on_linear_core n hn hu
   have h := hC u
   rw [hOne] at h
   linarith
