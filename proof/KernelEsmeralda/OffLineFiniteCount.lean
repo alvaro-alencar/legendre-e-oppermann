@@ -30,12 +30,15 @@ theorem dyadic_offLine_finset_mult_add_N0_le_N
     intro z hz
     unfold carrierFinsetToComplex at hz
     rw [Finset.mem_map] at hz
-    obtain ⟨rho, hrhos, rfl⟩ := hz
+    obtain ⟨rho, hrhos, hz⟩ := hz
+    subst z
+    have hemb : zetaCarrierEmbedding rho = (rho : Complex) := rfl
+    rw [hemb]
     have hrhoZero : Zeta23.IsNontrivialZero (rho : Complex) := by
       simpa [Zeta23.zetaZeroConfig_carrier] using rho.property
     have hrhoW : (rho : Complex) ∈ Zeta23.zerosIn T (2 * T) :=
       ⟨hrhoZero, (hs rho hrhos).2.1, (hs rho hrhos).2.2⟩
-    simpa [Wfin, zetaCarrierEmbedding] using hrhoW
+    simpa [Wfin] using hrhoW
 
   have honSub : onfin ⊆ Wfin := by
     intro z hz
