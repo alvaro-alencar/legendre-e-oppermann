@@ -95,7 +95,7 @@ theorem emerald_zero_kernel_factor_mul_sq_le_of_re_le
   have hC : 0 ≤ Zeta23.Taper.C1 Zeta23.Taper.smoothstep
       (emeraldTaperLength n) (emeraldTaperWidth n) := by
     unfold Zeta23.Taper.C1
-    exact MeasureTheory.integral_nonneg (fun _ => norm_nonneg _)
+    exact MeasureTheory.integral_nonneg (fun _ => abs_nonneg _)
   exact hbase.trans (mul_le_mul_of_nonneg_right hexp hC)
 
 /-- Combining the beta-sensitive exponential with the explicit taper derivative
