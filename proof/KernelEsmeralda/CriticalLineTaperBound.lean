@@ -48,9 +48,12 @@ theorem emerald_zero_kernel_factor_bound_on_critical_line
       ≤ Real.exp ((1 / 2 : Real) * emeraldTaperCenter n) *
           (Real.exp (emeraldTaperLength n / 4) * emeraldTaperLength n) :=
         mul_le_mul_of_nonneg_left hphi hpos
+    _ = (Real.exp (emeraldTaperCenter n / 2) *
+          Real.exp (emeraldTaperLength n / 4)) * emeraldTaperLength n := by ring
+    _ = Real.exp (emeraldTaperCenter n / 2 + emeraldTaperLength n / 4) *
+          emeraldTaperLength n := by rw [Real.exp_add]
     _ = Real.exp (emeraldLogRight n / 2) * emeraldTaperLength n := by
-      rw [show (1 / 2 : Real) * emeraldTaperCenter n = emeraldTaperCenter n / 2 by ring]
-      rw [mul_assoc, ← Real.exp_add, emeraldTaper_center_half_add_length_quarter]
+      rw [emeraldTaper_center_half_add_length_quarter]
 
 end
 end KernelEsmeralda
