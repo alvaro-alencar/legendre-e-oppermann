@@ -35,7 +35,7 @@ theorem dyadic_offLine_finset_mult_add_N0_le_N
       simpa [Zeta23.zetaZeroConfig_carrier] using rho.property
     have hrhoW : (rho : Complex) ∈ Zeta23.zerosIn T (2 * T) :=
       ⟨hrhoZero, (hs rho hrhos).2.1, (hs rho hrhos).2.2⟩
-    simpa [Wfin] using hrhoW
+    simpa [Wfin, zetaCarrierEmbedding] using hrhoW
 
   have honSub : onfin ⊆ Wfin := by
     intro z hz
