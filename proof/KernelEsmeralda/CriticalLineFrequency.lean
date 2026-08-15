@@ -5,6 +5,16 @@ namespace KernelEsmeralda
 
 noncomputable section
 
+theorem emeraldLogLeft_eq_two_log_n
+    (n : Nat) (hn : 1 ≤ n) :
+    emeraldLogLeft n = 2 * Real.log (n : Real) := by
+  have hnpos : (0 : Real) < (n : Real) := by
+    exact_mod_cast (lt_of_lt_of_le Nat.zero_lt_one hn)
+  unfold emeraldLogLeft lowerSquare
+  rw [show (n : Real) ^ 2 = (n : Real) * (n : Real) by ring]
+  rw [Real.log_mul hnpos.ne' hnpos.ne']
+  ring
+
 theorem emeraldTaperCenter_eq_log_add_log
     (n : Nat) (hn : 1 ≤ n) :
     emeraldTaperCenter n =
@@ -31,6 +41,21 @@ theorem two_log_n_lt_emeraldTaperCenter
   rw [emeraldTaperCenter_eq_log_add_log n hn]
   linarith
 
+/-- Any translation center strictly to the right of the left edge log(n^2)
+of the Legendre window has normalized logarithmic frequency greater than 2.
+This is a geometric fact about the square interval, independent of the taper profile. -/
+theorem two_lt_normalized_frequency_of_inside_legendre_window
+    (n : Nat) (hn : 2 ≤ n) (c : Real)
+    (hc : emeraldLogLeft n < c) :
+    2 < c / Real.log (n : Real) := by
+  have hn1 : 1 ≤ n := le_trans (by decide : 1 ≤ 2) hn
+  have hnR : (2 : Real) ≤ (n : Real) := by exact_mod_cast hn
+  have hlogpos : 0 < Real.log (n : Real) := by
+    exact Real.log_pos (lt_of_lt_of_le (by norm_num : (1 : Real) < 2) hnR)
+  rw [emeraldLogLeft_eq_two_log_n n hn1] at hc
+  rw [lt_div_iff₀ hlogpos]
+  simpa [mul_comm] using hc
+
 /-- At the natural difficult zero height T=n, the translated Emerald test has
 normalized logarithmic frequency strictly larger than 2. -/
 theorem two_lt_emeraldNaturalFrequency
@@ -43,6 +68,28 @@ theorem two_lt_emeraldNaturalFrequency
   have hcenter := two_log_n_lt_emeraldTaperCenter n hn1
   rw [lt_div_iff₀ hlogpos]
   simpa [mul_comm] using hcenter
+
+/-- Pure numerical comparison with the valid Zeta23 parameter range.
+For every valid paper parameter P, lambda <= 1, while any center inside the
+Legendre logarithmic window has normalized frequency > 2.  This records the
+scale separation only; it does not by itself assert an impossibility theorem
+for every conceivable pair-correlation argument. -/
+theorem zeta23_lambda_lt_normalized_frequency_of_inside_legendre_window
+    (P : Zeta23.Params) (hP : P.Valid)
+    (n : Nat) (hn : 2 ≤ n) (c : Real)
+    (hc : emeraldLogLeft n < c) :
+    P.lam < c / Real.log (n : Real) := by
+  have hfreq := two_lt_normalized_frequency_of_inside_legendre_window n hn c hc
+  have hlam := hP.lam_le_one
+  linarith
+
+theorem zeta23_lambda_lt_emeraldNaturalFrequency
+    (P : Zeta23.Params) (hP : P.Valid)
+    (n : Nat) (hn : 2 ≤ n) :
+    P.lam < emeraldTaperCenter n / Real.log (n : Real) := by
+  have hfreq := two_lt_emeraldNaturalFrequency n hn
+  have hlam := hP.lam_le_one
+  linarith
 
 end
 end KernelEsmeralda
