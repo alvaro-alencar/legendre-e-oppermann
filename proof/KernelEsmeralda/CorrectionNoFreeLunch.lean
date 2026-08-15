@@ -28,12 +28,11 @@ theorem nonnegative_kernel_pole_add_remainder_nonneg
   have hmass := emeraldMass_nonneg_of_nonneg H hH n
   have hre := emeraldMass_eq_spectralBalance_re H n hn hsupp zeroSum hEF
   rw [hre] at hmass
+  have hmass' :
+      0 ≤ (emeraldPoleTerm H).re + (emeraldGammaTerm H).re - zeroSum.re := by
+    simpa only [Complex.add_re, Complex.sub_re] using hmass
   unfold emeraldSpectralRemainder
-  change 0 ≤ (emeraldPoleTerm H).re +
-    ((emeraldGammaTerm H).re - zeroSum.re)
-  change 0 ≤
-    (emeraldPoleTerm H + emeraldGammaTerm H - zeroSum).re at hmass
-  exact hmass
+  linarith
 
 /-- No-free-lunch form.  If a nonnegative correction `H` is subtracted from a
 baseline kernel, the increase `-R(H)` it can create in spectral remainder is
