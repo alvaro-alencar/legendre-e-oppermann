@@ -1,5 +1,4 @@
-import KernelEsmeralda.CriticalLineWindowBound
-import KernelEsmeralda.CriticalLineOrdinateDecay
+import KernelEsmeralda.CriticalLineWindowDecay
 
 open scoped BigOperators
 
