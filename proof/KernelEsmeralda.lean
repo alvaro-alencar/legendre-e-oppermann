@@ -61,8 +61,11 @@ import KernelEsmeralda.CriticalLineLogLoss
 import KernelEsmeralda.CriticalLinePhase
 import KernelEsmeralda.CriticalLineConjugation
 import KernelEsmeralda.CriticalLineFrequency
+import KernelEsmeralda.CriticalLineBandwidthThreshold
 import KernelEsmeralda.ClaudeTwoThirdsBridge
 import KernelEsmeralda.ClaudeOffLineCount
 import KernelEsmeralda.OffLineBetaBound
 import KernelEsmeralda.OffLineUnconditionalBound
 import KernelEsmeralda.OffLineDyadicBeta
+import KernelEsmeralda.OffLineFiniteCount
+import KernelEsmeralda.ClaudeWeightedOffLine
