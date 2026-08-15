@@ -17,11 +17,12 @@ theorem neg_I_mul_critical_zero
     (hrho : (rho : Complex).re = 1 / 2) :
     -Complex.I * (rho : Complex) =
       ((rho : Complex).im : Complex) - Complex.I / 2 := by
+  have hcrit := critical_zero_eq_half_add_I_im rho hrho
   calc
     -Complex.I * (rho : Complex)
         = -Complex.I *
             ((1 / 2 : Complex) + Complex.I * ((rho : Complex).im : Complex)) := by
-              rw [critical_zero_eq_half_add_I_im rho hrho]
+              exact congrArg (fun z : Complex => -Complex.I * z) hcrit
     _ = -Complex.I / 2 -
           (Complex.I * Complex.I) * ((rho : Complex).im : Complex) := by ring
     _ = ((rho : Complex).im : Complex) - Complex.I / 2 := by
@@ -36,6 +37,7 @@ theorem exp_critical_zero_center_factorization
         Complex.exp
           (Complex.I * ((rho : Complex).im : Complex) *
             (emeraldTaperCenter n : Complex)) := by
+  have hcrit := critical_zero_eq_half_add_I_im rho hrho
   have harg :
       ((1 / 2 : Complex) + Complex.I * ((rho : Complex).im : Complex)) *
           (emeraldTaperCenter n : Complex) =
@@ -49,7 +51,8 @@ theorem exp_critical_zero_center_factorization
         = Complex.exp
             (((1 / 2 : Complex) + Complex.I * ((rho : Complex).im : Complex)) *
               (emeraldTaperCenter n : Complex)) := by
-                rw [critical_zero_eq_half_add_I_im rho hrho]
+                exact congrArg
+                  (fun z : Complex => Complex.exp (z * (emeraldTaperCenter n : Complex))) hcrit
     _ = Complex.exp
           (((emeraldTaperCenter n / 2 : Real) : Complex) +
             Complex.I * ((rho : Complex).im : Complex) *
