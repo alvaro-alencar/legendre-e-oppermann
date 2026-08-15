@@ -77,3 +77,5 @@ import KernelEsmeralda.ClaudeFixedLambdaBarrier
 import KernelEsmeralda.ClaudeLambdaThreshold
 import KernelEsmeralda.SignedKernelCorrection
 import KernelEsmeralda.SignedPoleBudget
+import KernelEsmeralda.CorrectionNoFreeLunch
+import KernelEsmeralda.KernelRedistribution
