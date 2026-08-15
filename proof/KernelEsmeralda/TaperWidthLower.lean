@@ -8,8 +8,8 @@ noncomputable section
 theorem emeraldLeftMargin_ge_inv_four_n
     (n : Nat) (hn : 1 ≤ n) :
     1 / (4 * (n : Real)) ≤ emeraldLinearCoreLeft n - emeraldLogLeft n := by
-  have hnpos : (0 : Real) < (n : Real) := by
-    exact_mod_cast (lt_of_lt_of_le Nat.zero_lt_one hn)
+  have hnR : (1 : Real) ≤ (n : Real) := by exact_mod_cast hn
+  have hnpos : (0 : Real) < (n : Real) := lt_of_lt_of_le zero_lt_one hnR
   have hlpos : 0 < lowerSquare n := by
     unfold lowerSquare
     positivity
@@ -25,7 +25,7 @@ theorem emeraldLeftMargin_ge_inv_four_n
     unfold emeraldLinearCoreLeftX lowerSquare
     push_cast
     field_simp [hnpos.ne']
-    nlinarith
+    nlinarith [hnR]
   have hmain :
       1 / (4 * (n : Real)) ≤
         Real.log (emeraldLinearCoreLeftX n / lowerSquare n) :=
@@ -37,8 +37,8 @@ theorem emeraldLeftMargin_ge_inv_four_n
 theorem emeraldRightMargin_ge_inv_four_n
     (n : Nat) (hn : 1 ≤ n) :
     1 / (4 * (n : Real)) ≤ emeraldLogRight n - emeraldLinearCoreRight n := by
-  have hnpos : (0 : Real) < (n : Real) := by
-    exact_mod_cast (lt_of_lt_of_le Nat.zero_lt_one hn)
+  have hnR : (1 : Real) ≤ (n : Real) := by exact_mod_cast hn
+  have hnpos : (0 : Real) < (n : Real) := lt_of_lt_of_le zero_lt_one hnR
   have hupperpos : 0 < upperSquare n := by
     unfold upperSquare
     positivity
@@ -54,7 +54,7 @@ theorem emeraldRightMargin_ge_inv_four_n
     unfold upperSquare emeraldLinearCoreRightX lowerSquare
     push_cast
     field_simp [hnpos.ne']
-    nlinarith
+    nlinarith [hnR]
   have hmain :
       1 / (4 * (n : Real)) ≤
         Real.log (upperSquare n / emeraldLinearCoreRightX n) :=
