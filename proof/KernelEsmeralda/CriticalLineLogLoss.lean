@@ -30,7 +30,6 @@ theorem exists_emeraldCriticalNaturalScaleLogBound :
         ≤ D * (n : Real) ^ 2 * Real.log (n : Real) / (n : Real) := h
     _ = D * (n : Real) * Real.log (n : Real) := by
       field_simp [hnpos.ne']
-      ring
 
 end
 end KernelEsmeralda
