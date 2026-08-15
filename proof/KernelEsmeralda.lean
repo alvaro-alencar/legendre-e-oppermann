@@ -55,3 +55,4 @@ import KernelEsmeralda.CriticalLineWindowDecay
 import KernelEsmeralda.SplitLogTarget
 import KernelEsmeralda.CriticalLineDyadicBlock
 import KernelEsmeralda.CriticalLineDyadicCount
+import KernelEsmeralda.ZetaDyadicCountUpper
