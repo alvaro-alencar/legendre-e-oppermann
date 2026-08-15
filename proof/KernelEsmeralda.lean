@@ -57,3 +57,4 @@ import KernelEsmeralda.CriticalLineDyadicBlock
 import KernelEsmeralda.CriticalLineDyadicCount
 import KernelEsmeralda.ZetaDyadicCountUpper
 import KernelEsmeralda.CriticalLineDyadicRvM
+import KernelEsmeralda.CriticalLineLogLoss
