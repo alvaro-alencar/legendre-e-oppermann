@@ -58,7 +58,6 @@ theorem exists_emeraldCriticalDyadicRvMBound :
       _ = D * (n : Real) ^ 2 * Real.log T / T := by
         unfold D
         field_simp [ne_of_gt hTpos]
-        ring
 
 end
 end KernelEsmeralda
