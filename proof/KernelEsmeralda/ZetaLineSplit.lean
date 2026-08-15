@@ -14,7 +14,7 @@ def emeraldCriticalZeros : Set Zeta23.zetaZeroConfig.carrier :=
 
 /-- The complementary block of nontrivial zeros, i.e. zeros off the critical line. -/
 def emeraldOffCriticalZeros : Set Zeta23.zetaZeroConfig.carrier :=
-  emeraldCriticalZerosᶜ
+  Set.compl emeraldCriticalZeros
 
 /-- One multiplicity-weighted zero-side summand for the Emerald Weil test. -/
 def emeraldZetaZeroTerm (K : Real → Real)
@@ -61,13 +61,14 @@ theorem emeraldZetaZeroSum_eq_onLine_add_offLine
     simpa [f] using emeraldZetaZeroTerm_summable K hK hKcompact
   have hon : Summable (f ∘ (↑) : emeraldCriticalZeros → Complex) :=
     hf.subtype emeraldCriticalZeros
-  have hoff : Summable (f ∘ (↑) : emeraldCriticalZerosᶜ → Complex) :=
-    hf.subtype emeraldCriticalZerosᶜ
+  have hoff : Summable
+      (f ∘ (↑) : (Set.compl emeraldCriticalZeros) → Complex) :=
+    hf.subtype (Set.compl emeraldCriticalZeros)
   have hsum := hon.hasSum.add_compl hoff.hasSum
   calc
     emeraldZetaZeroSum K = ∑' rho, f rho := by rfl
     _ = (∑' rho : emeraldCriticalZeros, (f ∘ (↑)) rho) +
-        ∑' rho : emeraldCriticalZerosᶜ, (f ∘ (↑)) rho := hsum.tsum_eq
+        ∑' rho : (Set.compl emeraldCriticalZeros), (f ∘ (↑)) rho := hsum.tsum_eq
     _ = emeraldZetaOnLineZeroSum K + emeraldZetaOffLineZeroSum K := by
       unfold emeraldZetaOnLineZeroSum emeraldZetaOffLineZeroSum emeraldOffCriticalZeros
       simp only [Function.comp_apply, f]
