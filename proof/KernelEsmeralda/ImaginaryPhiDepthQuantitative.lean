@@ -82,8 +82,8 @@ theorem zeta23_taper_Phi_imag_re_ge_edge
     apply MeasureTheory.integral_mono_of_nonneg
     · exact Eventually.of_forall (fun _ => by dsimp [c]; positivity)
     · exact hgI.integrableOn
-    · rw [ae_restrict_iff' measurableSet_Ioc]
-      exact Eventually.of_forall (fun u hu => hpoint u hu)
+    · filter_upwards [ae_restrict_mem measurableSet_Ioc] with u hu
+      exact hpoint u hu
 
   have hconst : (∫ _u in Ioc a b, c) = (w / 2) * c := by
     rw [← intervalIntegral.integral_of_le hab]
