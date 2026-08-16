@@ -68,6 +68,7 @@ import KernelEsmeralda.KernelPhaseFloor
 import KernelEsmeralda.ResearchFrontier
 import KernelEsmeralda.ComplexPoissonTarget
 import KernelEsmeralda.ComplexPoissonCore
+import KernelEsmeralda.ComplexPoissonDecay
 import KernelEsmeralda.ImaginaryPhiDepth
 import KernelEsmeralda.ImaginaryPhiDepthQuantitative
 import KernelEsmeralda.ComplexPoissonEnergy
