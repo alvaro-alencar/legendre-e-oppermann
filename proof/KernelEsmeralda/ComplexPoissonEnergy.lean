@@ -52,5 +52,31 @@ theorem zeta23ComplexPoisson_energy_of_target
     rw [hdiff]
     simp [Complex.mul_re]
 
+/-- The diagonal specialization `(z,z)` of complex Poisson fixes the full
+lattice sum of complex squares at the same real value `a L^2` as on the
+critical line.  Combined with the positive-energy specialization above, this
+will separate the real and imaginary energies of an off-line sample vector. -/
+theorem zeta23ComplexPoisson_square_of_target
+    (hTarget : Zeta23ComplexPoissonTarget)
+    (P : Zeta23.Params) (T : Real)
+    (hP : P.Valid) (hwL : 8 * P.w ≤ P.L T)
+    (z : Complex) :
+    HasSum
+      (fun k : Int =>
+        (P.phiHat T (z - (P.tau T k : Complex))) ^ 2)
+      (((P.a T * P.L T ^ 2 : Real) : Complex)) := by
+  have h := hTarget P T hP hwL z z
+  convert h using 1
+  · funext k
+    ring
+  · rw [sub_self]
+    change
+      (P.L T : Complex) * P.Phi T ((0 : Real) : Complex) =
+        ((P.a T * P.L T ^ 2 : Real) : Complex)
+    rw [Zeta23.Params.Phi_ofReal]
+    rw [Zeta23.Params.PhiR_zero hP hwL]
+    push_cast
+    ring
+
 end
 end KernelEsmeralda
