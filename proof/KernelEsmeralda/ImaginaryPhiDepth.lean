@@ -46,8 +46,8 @@ theorem zeta23_taper_Phi_imag_re_eq
       _ = -((y : Complex) * (u : Complex)) := by rw [Complex.I_mul_I]; ring
       _ = ((-(y * u) : Real) : Complex) := by push_cast; ring
   dsimp [F]
-  rw [harg, ← Complex.ofReal_exp]
-  simp
+  rw [harg]
+  simp [Complex.mul_re, Complex.exp_ofReal_re, Complex.exp_ofReal_im]
 
 /-- Evenness of the taper square makes the two opposite Laplace weights have
 exactly the same total mass. -/
