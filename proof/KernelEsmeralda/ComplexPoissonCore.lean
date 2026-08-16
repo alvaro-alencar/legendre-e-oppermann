@@ -132,6 +132,132 @@ theorem GauxC_zero
   push_cast
   ring_nf
 
+/-- Complex-parameter exponent bookkeeping for the Poisson/Fubini step. -/
+theorem cexp_bookkeepingC
+    {L T : Real} {tau tau' : Complex}
+    (hL : L ≠ 0) (xi u w : Real) :
+    Complex.exp
+        (Complex.I *
+          (tau * (u : Complex) +
+            tau' * ((L * xi - u : Real) : Complex) -
+            ((T * L * xi : Real) : Complex))) *
+      Complex.exp (((-2 * Real.pi * xi * w : Real) : Complex) * Complex.I) =
+    Complex.exp
+        (Complex.I *
+          (tau - (((T + w * (2 * Real.pi / L) : Real)) : Complex)) *
+          (u : Complex)) *
+      Complex.exp
+        (Complex.I *
+          (tau' - (((T + w * (2 * Real.pi / L) : Real)) : Complex)) *
+          ((L * xi - u : Real) : Complex)) := by
+  have hLC : (L : Complex) ≠ 0 := Complex.ofReal_ne_zero.mpr hL
+  rw [← Complex.exp_add, ← Complex.exp_add]
+  congr 1
+  push_cast
+  field_simp
+  ring
+
+/-- Fubini computation with complex sampling parameters:
+`Fourier(G_C)(w) = phiHat(tau-tau_w) * phiHat(tau'-tau_w)` for real w. -/
+theorem fourier_GauxC
+    {phi : Real → Real} {L T : Real} {tau tau' : Complex}
+    (hL : 0 < L) (hphic : Continuous phi)
+    (hsupp : ∀ u, L / 2 ≤ |u| → phi u = 0)
+    (w : Real) :
+    𝓕 (GauxC phi L T tau tau') w =
+      Zeta23.paperFT (fun u => (phi u : Complex))
+        (tau - (((T + w * (2 * Real.pi / L) : Real)) : Complex)) *
+      Zeta23.paperFT (fun u => (phi u : Complex))
+        (tau' - (((T + w * (2 * Real.pi / L) : Real)) : Complex)) := by
+  set alpha : Complex :=
+    tau - (((T + w * (2 * Real.pi / L) : Real)) : Complex) with halpha
+  set beta : Complex :=
+    tau' - (((T + w * (2 * Real.pi / L) : Real)) : Complex) with hbeta
+  set J : Real → Real → Complex := fun xi u =>
+    Complex.exp (((-2 * Real.pi * xi * w : Real) : Complex) * Complex.I) *
+      gIntC phi L T tau tau' xi u with hJ
+  have hJint : Integrable (Function.uncurry J) (volume.prod volume) := by
+    have hc : Continuous (Function.uncurry J) := by
+      have hg := gIntC_continuous
+        (L := L) (T := T) (tau := tau) (tau' := tau') hphic
+      simp only [hJ]
+      apply Continuous.mul _ hg
+      fun_prop
+    apply hc.integrable_of_hasCompactSupport
+    apply (gIntC_hasCompactSupport
+      (T := T) (tau := tau) (tau' := tau') hL hsupp).mono
+    intro p hp
+    rw [Function.mem_support] at hp ⊢
+    intro h0
+    apply hp
+    simp only [hJ, Function.uncurry] at h0 ⊢
+    rw [show p = (p.1, p.2) from rfl] at h0
+    simp only at h0
+    rw [h0, mul_zero]
+  rw [Real.fourier_real_eq_integral_exp_smul]
+  have step1 :
+      (fun xi : Real =>
+        Complex.exp (((-2 * Real.pi * xi * w : Real) : Complex) * Complex.I) •
+          GauxC phi L T tau tau' xi) =
+      fun xi => ∫ u, J xi u := by
+    funext xi
+    rw [smul_eq_mul, GauxC, hJ]
+    beta_reduce
+    rw [Zeta23.integral_const_mul_C]
+  rw [step1]
+  rw [integral_integral_swap hJint]
+  have step3 : ∀ u : Real, ∫ xi, J xi u =
+      (phi u : Complex) * Complex.exp (Complex.I * alpha * (u : Complex)) *
+        Zeta23.paperFT (fun v => (phi v : Complex)) beta := by
+    intro u
+    set F0 : Real → Complex := fun v =>
+      (phi v : Complex) * Complex.exp (Complex.I * beta * (v : Complex)) with hF0
+    have hpt : ∀ xi : Real, J xi u =
+        (phi u : Complex) * Complex.exp (Complex.I * alpha * (u : Complex)) *
+          ((L : Complex) * ((fun y : Real => F0 (y - u)) (L * xi))) := by
+      intro xi
+      simp only [hJ, gIntC, hF0]
+      have hb := cexp_bookkeepingC
+        (T := T) (tau := tau) (tau' := tau') hL.ne' xi u w
+      rw [← halpha, ← hbeta] at hb
+      calc
+        Complex.exp (((-2 * Real.pi * xi * w : Real) : Complex) * Complex.I) *
+            ((L : Complex) *
+              ((phi u : Complex) * (phi (L * xi - u) : Complex) *
+                Complex.exp
+                  (Complex.I *
+                    (tau * (u : Complex) +
+                      tau' * ((L * xi - u : Real) : Complex) -
+                      ((T * L * xi : Real) : Complex))))) =
+          (L : Complex) * (phi u : Complex) * (phi (L * xi - u) : Complex) *
+            (Complex.exp
+              (Complex.I *
+                (tau * (u : Complex) +
+                  tau' * ((L * xi - u : Real) : Complex) -
+                  ((T * L * xi : Real) : Complex))) *
+              Complex.exp (((-2 * Real.pi * xi * w : Real) : Complex) * Complex.I)) := by ring
+        _ = (L : Complex) * (phi u : Complex) * (phi (L * xi - u) : Complex) *
+            (Complex.exp (Complex.I * alpha * (u : Complex)) *
+              Complex.exp
+                (Complex.I * beta * ((L * xi - u : Real) : Complex))) := by
+              rw [hb]
+        _ = _ := by push_cast; ring
+    have hint : ∫ xi, J xi u =
+        ∫ xi,
+          (phi u : Complex) * Complex.exp (Complex.I * alpha * (u : Complex)) *
+            ((L : Complex) * ((fun y : Real => F0 (y - u)) (L * xi))) := by
+      congr 1 with xi
+      exact hpt xi
+    rw [hint, Zeta23.integral_const_mul_C, Zeta23.integral_const_mul_C,
+      Measure.integral_comp_mul_left (fun y : Real => F0 (y - u)) L,
+      integral_sub_right_eq_self F0 u, Zeta23.paperFT_def,
+      abs_of_pos (inv_pos.mpr hL)]
+    congr 1
+    rw [← Complex.coe_smul, smul_eq_mul, ← mul_assoc, Complex.ofReal_inv,
+      mul_inv_cancel₀ (Complex.ofReal_ne_zero.mpr hL.ne'), one_mul]
+  simp_rw [step3]
+  rw [Zeta23.integral_mul_const_C, Zeta23.paperFT_def, Zeta23.paperFT_def]
+
 end
 end ComplexPoissonCore
 end KernelEsmeralda
