@@ -1,4 +1,5 @@
 import Zeta23.Taper
+import Zeta23.Taper.Fourier
 import Mathlib.Analysis.SpecialFunctions.Arcosh
 
 open Complex MeasureTheory Real Set Filter Topology
@@ -26,7 +27,7 @@ theorem zeta23_taper_Phi_imag_re_eq
         ((∫ u : Real,
           (Zeta23.Taper.phi ϱ L w u) ^ 2 * Real.exp (-(y * u))) : Complex) := by
     unfold Zeta23.Taper.Phi Zeta23.paperFT
-    rw [← integral_ofReal_C]
+    rw [← Zeta23.integral_ofReal_C]
     congr 1 with u
     have harg :
         Complex.I * (Complex.I * (y : Complex)) * (u : Complex) =
@@ -34,7 +35,7 @@ theorem zeta23_taper_Phi_imag_re_eq
       push_cast
       rw [Complex.I_mul_I]
       ring
-    rw [harg]
+    rw [harg, ← Complex.ofReal_exp]
     norm_cast
   simpa using congrArg Complex.re hcomplex
 
@@ -47,6 +48,7 @@ theorem zeta23_taper_laplace_even
     ∫ u : Real,
       (Zeta23.Taper.phi ϱ L w u) ^ 2 * Real.exp (y * u) := by
   have h := integral_neg_eq_self
+    (μ := volume)
     (f := fun u : Real =>
       (Zeta23.Taper.phi ϱ L w u) ^ 2 * Real.exp (y * u))
   simpa [Zeta23.Taper.phi_even, mul_comm, mul_left_comm, mul_assoc] using h
@@ -62,7 +64,8 @@ theorem zeta23_taper_Phi_imag_re_ge_zero
       (Zeta23.Taper.Phi ϱ L w (Complex.I * (y : Complex))).re := by
   let q : Real → Real := fun u => (Zeta23.Taper.phi ϱ L w u) ^ 2
   have hphiC := Zeta23.Taper.phi_continuous hϱ hw hwL
-  have hphiS := Zeta23.Taper.phi_hasCompactSupport hϱ hw
+  have hphiS : HasCompactSupport (Zeta23.Taper.phi ϱ L w) :=
+    Zeta23.Taper.phi_hasCompactSupport (L := L) hϱ hw
   have hqC : Continuous q := by
     dsimp [q]
     exact hphiC.pow 2
@@ -112,7 +115,7 @@ theorem zeta23_taper_Phi_imag_re_ge_zero
   have hbase :
       Zeta23.Taper.PhiR ϱ L w 0 = ∫ u : Real, q u := by
     unfold Zeta23.Taper.PhiR Zeta23.Taper.Phi Zeta23.paperFT
-    rw [← integral_ofReal_C]
+    rw [← Zeta23.integral_ofReal_C]
     norm_num
     rfl
   rw [zeta23_taper_Phi_imag_re_eq hϱ hw hwL, hbase]
@@ -128,8 +131,10 @@ theorem zeta23_Phi_imag_re_ge_aL
   have h := zeta23_taper_Phi_imag_re_ge_zero
     (ϱ := P.ϱ) (L := P.L T) (w := P.w) (y := y)
     hP.taper (Zeta23.Params.w_pos hP) (Zeta23.Params.two_w_le hwL hP)
-  rw [Zeta23.Params.PhiR_zero hP hwL] at h
-  exact h
+  have hzero := Zeta23.Params.PhiR_zero (P := P) (T := T) hP hwL
+  change Zeta23.Taper.PhiR P.ϱ (P.L T) P.w 0 = P.a T * P.L T at hzero
+  rw [hzero] at h
+  simpa using h
 
 end
 end KernelEsmeralda
