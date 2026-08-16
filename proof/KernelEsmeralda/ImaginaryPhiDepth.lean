@@ -22,23 +22,32 @@ theorem zeta23_taper_Phi_imag_re_eq
     (Zeta23.Taper.Phi ϱ L w (Complex.I * (y : Complex))).re =
       ∫ u : Real,
         (Zeta23.Taper.phi ϱ L w u) ^ 2 * Real.exp (-(y * u)) := by
-  have hcomplex :
-      Zeta23.Taper.Phi ϱ L w (Complex.I * (y : Complex)) =
-        ((∫ u : Real,
-          (Zeta23.Taper.phi ϱ L w u) ^ 2 * Real.exp (-(y * u))) : Complex) := by
-    unfold Zeta23.Taper.Phi Zeta23.paperFT
-    congr 1 with u
-    have harg :
-        Complex.I * (Complex.I * (y : Complex)) * (u : Complex) =
-          ((-(y * u) : Real) : Complex) := by
-      calc
-        Complex.I * (Complex.I * (y : Complex)) * (u : Complex)
-            = (Complex.I * Complex.I) * (y : Complex) * (u : Complex) := by ring
-        _ = -((y : Complex) * (u : Complex)) := by rw [Complex.I_mul_I]; ring
-        _ = ((-(y * u) : Real) : Complex) := by push_cast; ring
-    rw [harg, ← Complex.ofReal_exp]
-    push_cast
-  simpa using congrArg Complex.re hcomplex
+  let F : Real → Complex := fun u =>
+    (((Zeta23.Taper.phi ϱ L w u) ^ 2 : Real) : Complex) *
+      Complex.exp
+        (Complex.I * (Complex.I * (y : Complex)) * (u : Complex))
+  have hFC : Continuous F := by
+    dsimp [F]
+    exact (Zeta23.Taper.phiSqC_continuous hϱ hw hwL).mul (by fun_prop)
+  have hFS : HasCompactSupport F := by
+    dsimp [F]
+    exact (Zeta23.Taper.phiSqC_hasCompactSupport hϱ hw).mul_right
+  have hFI : Integrable F := hFC.integrable_of_hasCompactSupport hFS
+  unfold Zeta23.Taper.Phi Zeta23.paperFT
+  change (∫ u : Real, F u).re = _
+  rw [← Zeta23.integral_re_C hFI]
+  congr 1 with u
+  have harg :
+      Complex.I * (Complex.I * (y : Complex)) * (u : Complex) =
+        ((-(y * u) : Real) : Complex) := by
+    calc
+      Complex.I * (Complex.I * (y : Complex)) * (u : Complex)
+          = (Complex.I * Complex.I) * (y : Complex) * (u : Complex) := by ring
+      _ = -((y : Complex) * (u : Complex)) := by rw [Complex.I_mul_I]; ring
+      _ = ((-(y * u) : Real) : Complex) := by push_cast; ring
+  dsimp [F]
+  rw [harg, ← Complex.ofReal_exp]
+  simp
 
 /-- Evenness of the taper square makes the two opposite Laplace weights have
 exactly the same total mass. -/
