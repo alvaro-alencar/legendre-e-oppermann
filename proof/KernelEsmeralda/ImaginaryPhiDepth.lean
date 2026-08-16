@@ -31,11 +31,13 @@ theorem zeta23_taper_Phi_imag_re_eq
     have harg :
         Complex.I * (Complex.I * (y : Complex)) * (u : Complex) =
           ((-(y * u) : Real) : Complex) := by
-      push_cast
-      rw [Complex.I_mul_I]
-      ring
+      calc
+        Complex.I * (Complex.I * (y : Complex)) * (u : Complex)
+            = (Complex.I * Complex.I) * (y : Complex) * (u : Complex) := by ring
+        _ = -((y : Complex) * (u : Complex)) := by rw [Complex.I_mul_I]; ring
+        _ = ((-(y * u) : Real) : Complex) := by push_cast; ring
     rw [harg, ← Complex.ofReal_exp]
-    norm_cast
+    push_cast
   simpa using congrArg Complex.re hcomplex
 
 /-- Evenness of the taper square makes the two opposite Laplace weights have
@@ -112,7 +114,6 @@ theorem zeta23_taper_Phi_imag_re_ge_zero
       Zeta23.Taper.PhiR ϱ L w 0 = ∫ u : Real, q u := by
     unfold Zeta23.Taper.PhiR Zeta23.Taper.Phi
     rw [Complex.ofReal_zero, Zeta23.Taper.paperFT_ofReal_zero, Complex.ofReal_re]
-    rfl
   rw [zeta23_taper_Phi_imag_re_eq hϱ hw hwL, hbase]
   dsimp [q] at hmono ⊢
   linarith
