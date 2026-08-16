@@ -27,7 +27,6 @@ theorem zeta23_taper_Phi_imag_re_eq
         ((∫ u : Real,
           (Zeta23.Taper.phi ϱ L w u) ^ 2 * Real.exp (-(y * u))) : Complex) := by
     unfold Zeta23.Taper.Phi Zeta23.paperFT
-    rw [← Zeta23.integral_ofReal_C]
     congr 1 with u
     have harg :
         Complex.I * (Complex.I * (y : Complex)) * (u : Complex) =
@@ -64,8 +63,6 @@ theorem zeta23_taper_Phi_imag_re_ge_zero
       (Zeta23.Taper.Phi ϱ L w (Complex.I * (y : Complex))).re := by
   let q : Real → Real := fun u => (Zeta23.Taper.phi ϱ L w u) ^ 2
   have hphiC := Zeta23.Taper.phi_continuous hϱ hw hwL
-  have hphiS : HasCompactSupport (Zeta23.Taper.phi ϱ L w) :=
-    Zeta23.Taper.phi_hasCompactSupport (L := L) hϱ hw
   have hqC : Continuous q := by
     dsimp [q]
     exact hphiC.pow 2
@@ -108,15 +105,13 @@ theorem zeta23_taper_Phi_imag_re_ge_zero
   have hmono :
       ∫ u : Real, 2 * q u ≤
         ∫ u : Real, q u * Real.exp (-(y * u)) + q u * Real.exp (y * u) := by
-    exact integral_mono (hqI.const_mul 2) (hmI.add hpI)
-      (Eventually.of_forall hpt)
+    exact integral_mono (hqI.const_mul 2) (hmI.add hpI) hpt
   have hsym := zeta23_taper_laplace_even (ϱ := ϱ) (L := L) (w := w) (y := y)
   rw [integral_const_mul, integral_add hmI hpI, ← hsym] at hmono
   have hbase :
       Zeta23.Taper.PhiR ϱ L w 0 = ∫ u : Real, q u := by
-    unfold Zeta23.Taper.PhiR Zeta23.Taper.Phi Zeta23.paperFT
-    rw [← Zeta23.integral_ofReal_C]
-    norm_num
+    unfold Zeta23.Taper.PhiR Zeta23.Taper.Phi
+    rw [Complex.ofReal_zero, Zeta23.Taper.paperFT_ofReal_zero, Complex.ofReal_re]
     rfl
   rw [zeta23_taper_Phi_imag_re_eq hϱ hw hwL, hbase]
   dsimp [q] at hmono ⊢
@@ -134,7 +129,10 @@ theorem zeta23_Phi_imag_re_ge_aL
   have hzero := Zeta23.Params.PhiR_zero (P := P) (T := T) hP hwL
   change Zeta23.Taper.PhiR P.ϱ (P.L T) P.w 0 = P.a T * P.L T at hzero
   rw [hzero] at h
-  simpa using h
+  change P.a T * P.L T ≤
+    (Zeta23.Taper.Phi P.ϱ (P.L T) P.w
+      (Complex.I * (y : Complex))).re
+  exact h
 
 end
 end KernelEsmeralda
