@@ -47,7 +47,7 @@ theorem zeta23ComplexPoisson_energy_of_target
           Complex.I * ((2 * z.im : Real) : Complex) := by
       apply Complex.ext
       · simp [Complex.mul_re]
-      · simp only [sub_im, map_im, Complex.I_mul_im, Complex.ofReal_re]
+      · simp [Complex.mul_im]
         ring
     rw [hdiff]
     simp [Complex.mul_re]
