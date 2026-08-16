@@ -70,6 +70,7 @@ theorem zeta23ComplexPoisson_square_of_target
   · funext k
     ring
   · rw [sub_self]
+    symm
     change
       (P.L T : Complex) * P.Phi T ((0 : Real) : Complex) =
         ((P.a T * P.L T ^ 2 : Real) : Complex)
