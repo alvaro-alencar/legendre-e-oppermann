@@ -29,8 +29,6 @@ theorem rtrace_imPart_eq_imaginary_energy
     push_cast
     refine sum_congr rfl fun k _ => ?_
     simp [Zeta23.ZeroSide.ZeroBlockData.yv, pow_two]
-  rw [hdot]
-  simp [Complex.mul_re]
-  ring
+  rw [hdot, ← Complex.ofReal_mul, RCLike.re_to_complex, Complex.ofReal_re]
 
 end KernelEsmeralda
