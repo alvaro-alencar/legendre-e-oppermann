@@ -35,7 +35,7 @@ theorem finiteImaginaryEnergy_eq_grid_sum
 theorem imaginaryEnergyTail_nonneg
     (P : Zeta23.Params) (T : ℝ) (z : ℂ) :
     0 ≤
-      ∑' k : (↑(finiteGridIndexSet P T : Finset ℤ) : Set ℤ)ᶜ,
+      ∑' k : ((finiteGridIndexSet P T : Set ℤ)ᶜ),
         imaginaryEnergyTerm P T z k := by
   apply tsum_nonneg
   intro k
@@ -49,29 +49,34 @@ theorem imaginaryCompressionLoss_eq_tail
     (hP : P.Valid) (hwL : 8 * P.w ≤ P.L T)
     (z : ℂ) :
     imaginaryCompressionLoss P T z =
-      ∑' k : (↑(finiteGridIndexSet P T : Finset ℤ) : Set ℤ)ᶜ,
+      ∑' k : ((finiteGridIndexSet P T : Set ℤ)ᶜ),
         imaginaryEnergyTerm P T z k := by
   have hsum := zeta23ComplexPoisson_imaginary_energy P T hP hwL z
+  have hsum' :
+      HasSum (imaginaryEnergyTerm P T z) (fullImaginaryEnergy P T z) := by
+    unfold imaginaryEnergyTerm fullImaginaryEnergy
+    simpa using hsum
   let s : Finset ℤ := finiteGridIndexSet P T
-  let f : ℤ → ℝ := imaginaryEnergyTerm P T z
-  have hsum' : HasSum f (fullImaginaryEnergy P T z) := by
-    simpa [f, imaginaryEnergyTerm, fullImaginaryEnergy] using hsum
   have hsplit := hsum'.summable.sum_add_tsum_compl (s := s)
   have htotal :
-      (∑ k ∈ s, f k) + (∑' k : (↑(s : Set ℤ)ᶜ), f k) =
+      (∑ k ∈ s, imaginaryEnergyTerm P T z k) +
+          (∑' k : ((s : Set ℤ)ᶜ), imaginaryEnergyTerm P T z k) =
         fullImaginaryEnergy P T z := by
     calc
-      (∑ k ∈ s, f k) + (∑' k : (↑(s : Set ℤ)ᶜ), f k)
-          = ∑' k, f k := hsplit
+      (∑ k ∈ s, imaginaryEnergyTerm P T z k) +
+          (∑' k : ((s : Set ℤ)ᶜ), imaginaryEnergyTerm P T z k)
+          = ∑' k, imaginaryEnergyTerm P T z k := hsplit
       _ = fullImaginaryEnergy P T z := hsum'.tsum_eq
   have hfin :
-      finiteImaginaryEnergy P T z = ∑ k ∈ s, f k := by
-    simpa [s, f] using finiteImaginaryEnergy_eq_grid_sum P T z
+      finiteImaginaryEnergy P T z =
+        ∑ k ∈ s, imaginaryEnergyTerm P T z k := by
+    simpa [s] using finiteImaginaryEnergy_eq_grid_sum P T z
   unfold imaginaryCompressionLoss
   rw [hfin]
   change
-    fullImaginaryEnergy P T z - ∑ k ∈ s, f k =
-      ∑' k : (↑(s : Set ℤ)ᶜ), f k
+    fullImaginaryEnergy P T z -
+        ∑ k ∈ s, imaginaryEnergyTerm P T z k =
+      ∑' k : ((s : Set ℤ)ᶜ), imaginaryEnergyTerm P T z k
   linarith
 
 end
