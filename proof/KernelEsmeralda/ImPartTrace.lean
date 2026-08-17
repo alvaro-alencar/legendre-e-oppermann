@@ -23,14 +23,16 @@ theorem rtrace_imPart_eq_imaginary_energy
   rw [trace_sum, map_sum]
   refine sum_congr rfl fun z hz => ?_
   rw [trace_smul, trace_vecMulVec, smul_eq_mul, dotProduct]
-  simp only [Zeta23.ZeroSide.ZeroBlockData.yv,
-    Complex.ofReal_re, Complex.ofReal_im, Complex.ofReal_natCast]
-  push_cast
-  change Complex.re
-      ((((D.m z : ℝ) : ℂ) *
-        ∑ x, (((D.v z x).im : ℂ) ^ 2)) * 2) =
-    ((D.m z : ℝ) * ∑ x, (D.v z x).im ^ 2) * 2
-  simp
+  have hdot :
+      ∑ k : d,
+          Zeta23.ZeroSide.ZeroBlockData.yv D z k *
+            Zeta23.ZeroSide.ZeroBlockData.yv D z k =
+        (((∑ k : d, (D.v z k).im ^ 2 : ℝ)) : ℂ) := by
+    push_cast
+    refine sum_congr rfl fun k _ => ?_
+    simp [Zeta23.ZeroSide.ZeroBlockData.yv]
+  rw [hdot, ← Complex.ofReal_natCast, ← Complex.ofReal_mul,
+    RCLike.re_to_complex, Complex.ofReal_re]
   ring
 
 end KernelEsmeralda
