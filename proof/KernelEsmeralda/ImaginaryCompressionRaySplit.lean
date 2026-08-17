@@ -7,7 +7,12 @@ namespace KernelEsmeralda
 noncomputable section
 
 /-- Any summable series on the integer grid splits over the omitted indices
-into the negative ray and the ray beginning at `d`. -/
+into the negative ray and the ray beginning at `d`.
+
+The proof uses a dependent subtype equivalence.  Its normalization is
+elaboration-heavy, so only this theorem receives a larger heartbeat budget;
+the mathematical statement and trusted kernel remain unchanged. -/
+set_option maxHeartbeats 600000 in
 theorem tsum_omittedGrid_eq_two_rays
     (P : Zeta23.Params) (T : ℝ)
     (f : ℤ → ℝ) (hf : Summable f) :
