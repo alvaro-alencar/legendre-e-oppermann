@@ -78,6 +78,7 @@ import KernelEsmeralda.ComplexPoissonImaginaryEnergy
 import KernelEsmeralda.FiniteEnergyCapture
 import KernelEsmeralda.FiniteImaginaryEnergy
 import KernelEsmeralda.ImPartTrace
+import KernelEsmeralda.ZetaImPartEnergy
 import KernelEsmeralda.GridTailInfinite
 import KernelEsmeralda.GammaOfGeometry
 import KernelEsmeralda.OffLineComplexEnergy
