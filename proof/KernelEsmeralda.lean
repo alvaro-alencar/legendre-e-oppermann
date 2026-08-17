@@ -73,6 +73,7 @@ import KernelEsmeralda.ComplexPoissonFull
 import KernelEsmeralda.ImaginaryPhiDepth
 import KernelEsmeralda.ImaginaryPhiDepthQuantitative
 import KernelEsmeralda.ComplexPoissonEnergy
+import KernelEsmeralda.ComplexPoissonConcreteEnergy
 import KernelEsmeralda.ClaudeTwoThirdsBridge
 import KernelEsmeralda.ClaudeOffLineCount
 import KernelEsmeralda.OffLineBetaBound
