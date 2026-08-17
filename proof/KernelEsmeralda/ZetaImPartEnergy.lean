@@ -24,7 +24,10 @@ theorem rtrace_zeta_imPart_eq_weighted_finiteImaginaryEnergy
     (Zeta23.ZeroSide.blockData Z T P hconj) R]
   refine sum_congr rfl fun z hz => ?_
   simp only [Zeta23.ZeroSide.blockData, Zeta23.ZeroSide.mkData_m]
-  unfold finiteImaginaryEnergy Zeta23.ZeroSide.evalVec
-  ring
+  unfold finiteImaginaryEnergy
+  congr 2
+  apply Finset.sum_congr rfl
+  intro x hx
+  rfl
 
 end KernelEsmeralda
