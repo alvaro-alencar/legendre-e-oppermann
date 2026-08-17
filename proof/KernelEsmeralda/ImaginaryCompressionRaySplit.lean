@@ -6,10 +6,10 @@ namespace KernelEsmeralda
 
 noncomputable section
 
-/-- Any summable series on the integer grid splits over the omitted indices
+/- Any summable series on the integer grid splits over the omitted indices
 into the negative ray and the ray beginning at `d`.
 
-The proof uses a dependent subtype equivalence.  Its normalization is
+The proof uses a dependent subtype equivalence. Its normalization is
 elaboration-heavy, so only this theorem receives a larger heartbeat budget;
 the mathematical statement and trusted kernel remain unchanged. -/
 set_option maxHeartbeats 600000 in
@@ -29,8 +29,12 @@ theorem tsum_omittedGrid_eq_two_rays
   have hreindex :
       (∑' k : S, f k) = ∑' q : Sum ℕ ℕ, g q :=
     hs'.tsum_eq.symm
+  have hleft : Summable (g ∘ Sum.inl) :=
+    hg.comp_injective Sum.inl_injective
+  have hright : Summable (g ∘ Sum.inr) :=
+    hg.comp_injective Sum.inr_injective
   change (∑' k : S, f k) = _
-  rw [hreindex, hg.tsum_sum]
+  rw [hreindex, hleft.tsum_sum hright]
   congr 1
   · apply tsum_congr
     intro j
