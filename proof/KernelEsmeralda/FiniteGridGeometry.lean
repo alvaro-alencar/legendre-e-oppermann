@@ -41,6 +41,7 @@ theorem zeta23_tau_neg_one
     P.tau T (-1) = T - P.hgrid T := by
   unfold Zeta23.Params.tau
   norm_num
+  ring
 
 end
 end KernelEsmeralda
