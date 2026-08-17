@@ -32,7 +32,9 @@ theorem imaginaryCompressionLoss_nonneg
     0 ≤ imaginaryCompressionLoss P T z := by
   have hsum := zeta23ComplexPoisson_imaginary_energy P T hP hwL z
   let e : Fin (P.d T) ↪ ℤ :=
-    ⟨fun k => ((k : ℕ) : ℤ), fun a b h => Fin.ext (by exact_mod_cast h)⟩
+    ⟨fun k => ((k : ℕ) : ℤ), fun a b h => by
+      apply Fin.ext
+      omega⟩
   have hfin :
       finiteImaginaryEnergy P T z ≤ fullImaginaryEnergy P T z := by
     unfold finiteImaginaryEnergy fullImaginaryEnergy
