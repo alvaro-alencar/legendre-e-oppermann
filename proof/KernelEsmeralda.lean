@@ -79,6 +79,7 @@ import KernelEsmeralda.FiniteEnergyCapture
 import KernelEsmeralda.FiniteImaginaryEnergy
 import KernelEsmeralda.ImaginaryCompressionTail
 import KernelEsmeralda.ImaginaryEnergyTermNorm
+import KernelEsmeralda.ImaginaryEnergyTermDecay
 import KernelEsmeralda.ImPartTrace
 import KernelEsmeralda.ZetaImPartEnergy
 import KernelEsmeralda.GridTailInfinite
