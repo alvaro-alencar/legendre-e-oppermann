@@ -19,7 +19,7 @@ theorem tsum_omittedGrid_eq_two_rays
   let g : Sum ℕ ℕ → ℝ := fun q => f (e q)
   have hcomp : Summable (fun k : S => f k) := hf.subtype S
   have hg : Summable g := by
-    exact hcomp.comp_injective e.injective
+    exact (e.summable_iff).2 hcomp
   have hreindex :
       (∑' k : S, f k) = ∑' q : Sum ℕ ℕ, g q := by
     have hs' : HasSum g (∑' k : S, f k) := by
