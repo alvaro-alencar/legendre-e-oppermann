@@ -34,7 +34,7 @@ theorem imaginaryCompressionLoss_nonneg
   let e : Fin (P.d T) ↪ ℤ :=
     ⟨fun k => ((k : ℕ) : ℤ), fun a b h => by
       apply Fin.ext
-      omega⟩
+      exact Int.ofNat.inj h⟩
   have hfin :
       finiteImaginaryEnergy P T z ≤ fullImaginaryEnergy P T z := by
     unfold finiteImaginaryEnergy fullImaginaryEnergy
