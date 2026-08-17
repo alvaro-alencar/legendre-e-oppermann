@@ -24,18 +24,13 @@ theorem rtrace_imPart_eq_imaginary_energy
   refine sum_congr rfl fun z hz => ?_
   rw [trace_smul, trace_vecMulVec, smul_eq_mul, dotProduct]
   have hdot :
-      ∑ k : d,
-          Zeta23.ZeroSide.ZeroBlockData.yv D z k *
-            Zeta23.ZeroSide.ZeroBlockData.yv D z k =
+      ∑ k : d, D.yv z k * D.yv z k =
         (((∑ k : d, (D.v z k).im ^ 2 : ℝ)) : ℂ) := by
     push_cast
     refine sum_congr rfl fun k _ => ?_
-    change (((D.v z k).im : ℂ) * ((D.v z k).im : ℂ)) =
-      ((((D.v z k).im ^ 2 : ℝ)) : ℂ)
-    rw [pow_two]
-    norm_cast
-  rw [hdot, RCLike.re_to_complex, Complex.mul_re,
-    Complex.ofReal_re, Complex.ofReal_im]
+    simp [Zeta23.ZeroSide.ZeroBlockData.yv, pow_two]
+  rw [hdot, RCLike.re_to_complex, Complex.ofReal_re]
+  push_cast
   ring
 
 end KernelEsmeralda
