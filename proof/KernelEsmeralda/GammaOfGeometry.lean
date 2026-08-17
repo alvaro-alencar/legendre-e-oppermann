@@ -11,7 +11,6 @@ theorem zeta23_gammaOf_im_eq_half_sub_re (rho : Complex) :
   unfold Zeta23.gammaOf
   rw [div_eq_mul_inv]
   simp [Complex.mul_im]
-  ring
 
 /-- Consequently a zero on the left half of the critical strip has
 nonnegative imaginary depth in the `gammaOf` coordinate. -/
