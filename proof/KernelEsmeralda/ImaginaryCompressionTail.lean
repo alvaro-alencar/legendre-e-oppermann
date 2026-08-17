@@ -35,7 +35,7 @@ theorem finiteImaginaryEnergy_eq_grid_sum
 theorem imaginaryEnergyTail_nonneg
     (P : Zeta23.Params) (T : ℝ) (z : ℂ) :
     0 ≤
-      ∑' k : ((finiteGridIndexSet P T : Set ℤ)ᶜ),
+      ∑' k : ↑((finiteGridIndexSet P T : Set ℤ)ᶜ),
         imaginaryEnergyTerm P T z k := by
   apply tsum_nonneg
   intro k
@@ -49,7 +49,7 @@ theorem imaginaryCompressionLoss_eq_tail
     (hP : P.Valid) (hwL : 8 * P.w ≤ P.L T)
     (z : ℂ) :
     imaginaryCompressionLoss P T z =
-      ∑' k : ((finiteGridIndexSet P T : Set ℤ)ᶜ),
+      ∑' k : ↑((finiteGridIndexSet P T : Set ℤ)ᶜ),
         imaginaryEnergyTerm P T z k := by
   have hsum := zeta23ComplexPoisson_imaginary_energy P T hP hwL z
   have hsum' :
@@ -60,11 +60,11 @@ theorem imaginaryCompressionLoss_eq_tail
   have hsplit := hsum'.summable.sum_add_tsum_compl (s := s)
   have htotal :
       (∑ k ∈ s, imaginaryEnergyTerm P T z k) +
-          (∑' k : ((s : Set ℤ)ᶜ), imaginaryEnergyTerm P T z k) =
+          (∑' k : ↑((s : Set ℤ)ᶜ), imaginaryEnergyTerm P T z k) =
         fullImaginaryEnergy P T z := by
     calc
       (∑ k ∈ s, imaginaryEnergyTerm P T z k) +
-          (∑' k : ((s : Set ℤ)ᶜ), imaginaryEnergyTerm P T z k)
+          (∑' k : ↑((s : Set ℤ)ᶜ), imaginaryEnergyTerm P T z k)
           = ∑' k, imaginaryEnergyTerm P T z k := hsplit
       _ = fullImaginaryEnergy P T z := hsum'.tsum_eq
   have hfin :
@@ -76,7 +76,7 @@ theorem imaginaryCompressionLoss_eq_tail
   change
     fullImaginaryEnergy P T z -
         ∑ k ∈ s, imaginaryEnergyTerm P T z k =
-      ∑' k : ((s : Set ℤ)ᶜ), imaginaryEnergyTerm P T z k
+      ∑' k : ↑((s : Set ℤ)ᶜ), imaginaryEnergyTerm P T z k
   linarith
 
 end
