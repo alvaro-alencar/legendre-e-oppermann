@@ -31,6 +31,17 @@ theorem finiteImaginaryEnergy_eq_grid_sum
   rw [Finset.sum_map]
   rfl
 
+/-- The omitted imaginary-energy tail is nonnegative term by term. -/
+theorem imaginaryEnergyTail_nonneg
+    (P : Zeta23.Params) (T : ℝ) (z : ℂ) :
+    0 ≤
+      ∑' k : (↑(finiteGridIndexSet P T : Finset ℤ) : Set ℤ)ᶜ,
+        imaginaryEnergyTerm P T z k := by
+  apply tsum_nonneg
+  intro k
+  unfold imaginaryEnergyTerm
+  positivity
+
 /-- The compression loss is not merely nonnegative: it is exactly the
 nonnegative Poisson-energy tail over the omitted integer indices. -/
 theorem imaginaryCompressionLoss_eq_tail
