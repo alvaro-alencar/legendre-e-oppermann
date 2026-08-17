@@ -130,8 +130,10 @@ theorem zeta23_taper_hasSum_phiHat_mul_complex
   change HasSum _
     ((L : Complex) * Zeta23.Taper.Phi ϱ L w (tau - tau'))
   convert hs using 1
-  funext k
-  rw [ComplexPoissonCore.fourier_GauxC hL hphiC hsupp]
+  · funext k
+    rw [ComplexPoissonCore.fourier_GauxC hL hphiC hsupp]
+    rfl
+  · rfl
 
 /-- The previously isolated research target is now discharged directly. -/
 theorem zeta23ComplexPoissonTarget_proved : Zeta23ComplexPoissonTarget := by
