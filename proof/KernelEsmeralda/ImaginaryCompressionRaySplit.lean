@@ -36,16 +36,6 @@ theorem tsum_omittedGrid_eq_two_rays
   change (∑' k : S, f k) = _
   rw [hreindex, hleft.tsum_sum hright]
   congr 1
-  · apply tsum_congr
-    intro j
-    change f (e (Sum.inl j)) = f (-((j : ℤ) + 1))
-    congr 1
-    exact omittedGridRayEquiv_inl_val P T j
-  · apply tsum_congr
-    intro j
-    change f (e (Sum.inr j)) = f ((P.d T : ℤ) + (j : ℤ))
-    congr 1
-    exact omittedGridRayEquiv_inr_val P T j
 
 /-- The imaginary-energy series over the full integer grid is summable by the
 complex Poisson identity. -/
