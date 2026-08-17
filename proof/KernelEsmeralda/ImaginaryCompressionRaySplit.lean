@@ -18,13 +18,12 @@ theorem tsum_omittedGrid_eq_two_rays
   let e : Sum ℕ ℕ ≃ S := omittedGridRayEquiv P T
   let g : Sum ℕ ℕ → ℝ := fun q => f (e q)
   have hcomp : Summable (fun k : S => f k) := hf.subtype S
-  have hg : Summable g := by
-    exact (e.summable_iff).2 hcomp
+  have hs' : HasSum g (∑' k : S, f k) := by
+    exact (e.hasSum_iff).2 hcomp.hasSum
+  have hg : Summable g := hs'.summable
   have hreindex :
-      (∑' k : S, f k) = ∑' q : Sum ℕ ℕ, g q := by
-    have hs' : HasSum g (∑' k : S, f k) := by
-      exact (e.hasSum_iff).2 hcomp.hasSum
-    exact hs'.tsum_eq.symm
+      (∑' k : S, f k) = ∑' q : Sum ℕ ℕ, g q :=
+    hs'.tsum_eq.symm
   change (∑' k : S, f k) = _
   rw [hreindex, hg.tsum_sum]
   congr 1
