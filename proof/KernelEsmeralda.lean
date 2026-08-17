@@ -81,6 +81,7 @@ import KernelEsmeralda.ImaginaryCompressionTail
 import KernelEsmeralda.ImPartTrace
 import KernelEsmeralda.ZetaImPartEnergy
 import KernelEsmeralda.GridTailInfinite
+import KernelEsmeralda.FiniteGridGeometry
 import KernelEsmeralda.GammaOfGeometry
 import KernelEsmeralda.OffLineComplexEnergy
 import KernelEsmeralda.ClaudeTwoThirdsBridge
