@@ -2,6 +2,7 @@ import KernelEsmeralda.OffLineDyadicBeta
 import KernelEsmeralda.CriticalLineUniformBound
 import KernelEsmeralda.OffLineUnconditionalBound
 import KernelEsmeralda.FullImaginaryEnergyDepth
+import KernelEsmeralda.DeepInteriorFiniteEnergy
 
 open scoped BigOperators
 
