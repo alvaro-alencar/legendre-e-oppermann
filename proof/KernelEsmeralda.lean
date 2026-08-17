@@ -80,6 +80,7 @@ import KernelEsmeralda.FiniteImaginaryEnergy
 import KernelEsmeralda.ImaginaryCompressionTail
 import KernelEsmeralda.FiniteGridIndexSet
 import KernelEsmeralda.OmittedGridEquiv
+import KernelEsmeralda.ImaginaryCompressionRaySplit
 import KernelEsmeralda.ImaginaryEnergyTermNorm
 import KernelEsmeralda.ImaginaryEnergyTermDecay
 import KernelEsmeralda.ImPartTrace
