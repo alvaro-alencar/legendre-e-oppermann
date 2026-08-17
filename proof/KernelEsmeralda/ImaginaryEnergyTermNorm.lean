@@ -13,8 +13,10 @@ theorem imaginaryEnergyTerm_le_two_norm_sq
   unfold imaginaryEnergyTerm
   have him := Complex.abs_im_le_norm
     (P.phiHat T (z - (P.tau T k : ℂ)))
-  nlinarith [sq_nonneg
-    ((P.phiHat T (z - (P.tau T k : ℂ))).im)]
+  have hs := pow_le_pow_left₀
+    (abs_nonneg (P.phiHat T (z - (P.tau T k : ℂ))).im) him 2
+  rw [sq_abs] at hs
+  nlinarith
 
 end
 end KernelEsmeralda
