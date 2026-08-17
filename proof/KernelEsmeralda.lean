@@ -91,6 +91,7 @@ import KernelEsmeralda.InteriorGridMargin
 import KernelEsmeralda.GridTailRays
 import KernelEsmeralda.ImaginaryEnergyRayBound
 import KernelEsmeralda.ImaginaryEnergyRaySum
+import KernelEsmeralda.ImaginaryCompressionBound
 import KernelEsmeralda.GammaOfGeometry
 import KernelEsmeralda.OffLineComplexEnergy
 import KernelEsmeralda.ClaudeTwoThirdsBridge
