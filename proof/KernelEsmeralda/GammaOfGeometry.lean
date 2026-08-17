@@ -1,4 +1,5 @@
 import KernelEsmeralda.ComplexPoissonConcreteEnergy
+import Zeta23.Statement.SeamClosed
 
 namespace KernelEsmeralda
 
