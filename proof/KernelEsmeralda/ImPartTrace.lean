@@ -30,9 +30,12 @@ theorem rtrace_imPart_eq_imaginary_energy
         (((∑ k : d, (D.v z k).im ^ 2 : ℝ)) : ℂ) := by
     push_cast
     refine sum_congr rfl fun k _ => ?_
-    simp [Zeta23.ZeroSide.ZeroBlockData.yv]
-  rw [hdot, ← Complex.ofReal_natCast, ← Complex.ofReal_mul,
-    RCLike.re_to_complex, Complex.ofReal_re]
+    change (((D.v z k).im : ℂ) * ((D.v z k).im : ℂ)) =
+      ((((D.v z k).im ^ 2 : ℝ)) : ℂ)
+    rw [pow_two]
+    norm_cast
+  rw [hdot, RCLike.re_to_complex, Complex.mul_re,
+    Complex.ofReal_re, Complex.ofReal_im]
   ring
 
 end KernelEsmeralda
