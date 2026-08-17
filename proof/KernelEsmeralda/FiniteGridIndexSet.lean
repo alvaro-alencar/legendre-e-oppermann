@@ -13,17 +13,23 @@ theorem mem_finiteGridIndexSet_iff
   constructor
   · intro hk
     rcases Finset.mem_map.mp hk with ⟨a, ha, rfl⟩
+    change 0 ≤ (((a : Fin (P.d T)) : ℕ) : ℤ) ∧
+      (((a : Fin (P.d T)) : ℕ) : ℤ) < (P.d T : ℤ)
     constructor
-    · exact Int.ofNat_nonneg _
+    · exact Int.natCast_nonneg _
     · exact_mod_cast a.isLt
   · rintro ⟨hk0, hkd⟩
+    have hkcast : ((k.toNat : ℕ) : ℤ) = k :=
+      Int.toNat_of_nonneg hk0
+    have hnatInt : ((k.toNat : ℕ) : ℤ) < (P.d T : ℤ) := by
+      simpa [hkcast] using hkd
     have hnat : k.toNat < P.d T := by
-      exact_mod_cast hkd
+      exact_mod_cast hnatInt
     let a : Fin (P.d T) := ⟨k.toNat, hnat⟩
     apply Finset.mem_map.mpr
     refine ⟨a, Finset.mem_univ a, ?_⟩
-    dsimp [a, finiteGridEmbedding]
-    simpa [Int.toNat_of_nonneg hk0]
+    change ((k.toNat : ℕ) : ℤ) = k
+    exact hkcast
 
 /-- An integer index is omitted precisely when it lies on one of the two
 infinite rays: negative, or at least `d`. -/
