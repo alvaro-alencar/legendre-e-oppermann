@@ -34,14 +34,31 @@ theorem zeta_zero_left_half_complex_energy_lower
     (hϱ := hP.taper) (hw := hw) (hwL := hwL) (hy := hy)
       (L := P.L T) (w := P.w)
       (y := 2 * (Zeta23.gammaOf (rho : Complex)).im)
+  have hphiP :
+      (P.w / 2) *
+          Real.exp
+            ((2 * (Zeta23.gammaOf (rho : Complex)).im) *
+              (P.L T / 2 - 3 * P.w / 2)) ≤
+        (P.Phi T
+          (Complex.I *
+            ((2 * (Zeta23.gammaOf (rho : Complex)).im : Real) : Complex))).re := by
+    change
+      (P.w / 2) *
+          Real.exp
+            ((2 * (Zeta23.gammaOf (rho : Complex)).im) *
+              (P.L T / 2 - 3 * P.w / 2)) ≤
+        (Zeta23.Taper.Phi P.ϱ (P.L T) P.w
+          (Complex.I *
+            ((2 * (Zeta23.gammaOf (rho : Complex)).im : Real) : Complex))).re
+    exact hphi
+  have hmul := mul_le_mul_of_nonneg_left hphiP hL.le
   have hyid :
       2 * (Zeta23.gammaOf (rho : Complex)).im =
         1 - 2 * (rho : Complex).re := by
     rw [zeta23_gammaOf_im_eq_half_sub_re]
     ring
-  rw [hyid] at hphi ⊢
-  have hmul := mul_le_mul_of_nonneg_left hphi hL.le
-  simpa [Zeta23.Params.Phi, Zeta23.Taper.Phi] using hmul
+  rw [hyid] at hmul
+  exact hmul
 
 /-- The same lower bound is the actual sum of the nonnegative lattice energy,
 by the now-proved complex Poisson identity. -/
