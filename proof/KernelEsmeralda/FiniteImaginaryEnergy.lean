@@ -35,13 +35,35 @@ theorem imaginaryCompressionLoss_nonneg
     ⟨fun k => ((k : ℕ) : ℤ), fun a b h => by
       apply Fin.ext
       exact Int.ofNat.inj h⟩
-  have hfin :
-      finiteImaginaryEnergy P T z ≤ fullImaginaryEnergy P T z := by
-    unfold finiteImaginaryEnergy fullImaginaryEnergy
-    have hle := sum_le_hasSum (Finset.univ.map e)
-      (fun i _ => by positivity) hsum
-    rw [Finset.sum_map] at hle
-    simpa [e] using hle
+  let s : Finset ℤ := Finset.univ.map e
+  let f : ℤ → ℝ := fun k =>
+    2 * (P.phiHat T (z - (P.tau T k : ℂ))).im ^ 2
+  have hsum' : HasSum f (fullImaginaryEnergy P T z) := by
+    simpa [f, fullImaginaryEnergy] using hsum
+  have hsplit := hsum'.summable.sum_add_tsum_compl (s := s)
+  have htail :
+      0 ≤ ∑' k : (↑(s : Set ℤ)ᶜ), f k := by
+    apply tsum_nonneg
+    intro k
+    dsimp [f]
+    positivity
+  have htotal :
+      (∑ k ∈ s, f k) + (∑' k : (↑(s : Set ℤ)ᶜ), f k) =
+        fullImaginaryEnergy P T z := by
+    calc
+      (∑ k ∈ s, f k) + (∑' k : (↑(s : Set ℤ)ᶜ), f k)
+          = ∑' k, f k := hsplit
+      _ = fullImaginaryEnergy P T z := hsum'.tsum_eq
+  have hfin' : (∑ k ∈ s, f k) ≤ fullImaginaryEnergy P T z := by
+    linarith
+  have hfin : finiteImaginaryEnergy P T z ≤ fullImaginaryEnergy P T z := by
+    unfold finiteImaginaryEnergy
+    rw [show (∑ k : Fin (P.d T),
+        2 * (P.phiHat T (z - (P.tau T (k : ℤ) : ℂ))).im ^ 2) =
+      ∑ k ∈ s, f k by
+        rw [show s = Finset.univ.map e by rfl, Finset.sum_map]
+        rfl]
+    exact hfin'
   unfold imaginaryCompressionLoss
   linarith
 
