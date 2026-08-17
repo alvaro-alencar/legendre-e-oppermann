@@ -3,6 +3,7 @@ import KernelEsmeralda.CriticalLineUniformBound
 import KernelEsmeralda.OffLineUnconditionalBound
 import KernelEsmeralda.FullImaginaryEnergyDepth
 import KernelEsmeralda.DeepInteriorFiniteEnergy
+import KernelEsmeralda.DeepPairTrace
 
 open scoped BigOperators
 
