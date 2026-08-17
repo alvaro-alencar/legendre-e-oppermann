@@ -1,4 +1,5 @@
 import Mathlib.Topology.Algebra.InfiniteSum.Group
+import Mathlib.Data.Real.Basic
 
 namespace KernelEsmeralda
 
@@ -6,13 +7,13 @@ noncomputable section
 
 /-- Abstract finite-compression bookkeeping.
 
-If a summable nonnegative-type energy has total mass `E`, and the complementary
-tail outside a finite set costs at most `R`, then the finite compression captures
-at least `E - R`.  No analytic estimate enters here; all analysis is isolated in
-the tail bound `htail`. -/
+If a summable energy has total mass `E`, and the complementary tail outside a
+finite set costs at most `R`, then the finite compression captures at least
+`E - R`.  No analytic estimate enters here; all analysis is isolated in the
+tail bound `htail`. -/
 theorem finite_sum_ge_total_sub_tail
     {ι : Type*} [DecidableEq ι]
-    (f : ι → Real) (s : Finset ι) {E R : Real}
+    (f : ι → ℝ) (s : Finset ι) {E R : ℝ}
     (hE : HasSum f E)
     (htail :
       (∑' x : (↑(s : Set ι)ᶜ), f x) ≤ R) :
