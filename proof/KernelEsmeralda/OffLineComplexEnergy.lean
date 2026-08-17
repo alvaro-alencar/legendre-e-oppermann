@@ -1,5 +1,6 @@
 import KernelEsmeralda.GammaOfGeometry
 import KernelEsmeralda.ImaginaryPhiDepthQuantitative
+import KernelEsmeralda.Zeta23Bridge
 
 namespace KernelEsmeralda
 
