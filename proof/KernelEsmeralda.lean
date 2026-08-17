@@ -86,6 +86,7 @@ import KernelEsmeralda.ClaudeSupportBarrier
 import KernelEsmeralda.ClaudeSupportScaleBarrier
 import KernelEsmeralda.ClaudeFixedLambdaBarrier
 import KernelEsmeralda.ClaudeLambdaThreshold
+import KernelEsmeralda.ClaudeQuantifierBarrier
 import KernelEsmeralda.SignedKernelCorrection
 import KernelEsmeralda.SignedPoleBudget
 import KernelEsmeralda.CorrectionNoFreeLunch
