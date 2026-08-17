@@ -23,7 +23,8 @@ theorem zeta23_params_phiHat_complex_decay
   change
     ‖P.phiHat T (z - (s : ℂ))‖ * (1 + (z.re - s) ^ 2) ≤
       imaginaryEnergyDecayEnvelope P T z
-  simpa [imaginaryEnergyDecayEnvelope, Zeta23.Params.C1] using h
+  simpa [imaginaryEnergyDecayEnvelope, Zeta23.Params.C1,
+    Zeta23.Params.phiHat_eq] using h
 
 /-- After squaring the quadratic Fourier decay, one imaginary-energy summand
 has a quartically weighted uniform bound.  This division-free form is chosen
