@@ -30,7 +30,7 @@ theorem rtrace_zeta_imPart_ge_half_L_sq_mul_pair_mass
           ((1 - 2 * (z : Complex).re) *
             (P.L T / 2 - 3 * P.w / 2)))
     (htail : ∀ z ∈ R.R,
-      zetaNaturalCompressionTail P T z ≤ (P.L T) ^ 2 / 2) :
+      zetaNaturalCompressionTail P T z.1 ≤ (P.L T) ^ 2 / 2) :
     (∑ z ∈ R.R, (Zeta23.zetaZeroConfig.mult z : ℝ)) *
         ((P.L T) ^ 2 / 2) ≤
       rtrace ((Zeta23.ZeroSide.blockData
@@ -40,12 +40,16 @@ theorem rtrace_zeta_imPart_ge_half_L_sq_mul_pair_mass
   rw [Finset.sum_mul]
   apply Finset.sum_le_sum
   intro z hz
-  have hE := zeta_zero_left_half_deep_interior_finiteImaginaryEnergy_lower
-    P T hP hwL z hT (hre z hz) (hordL z hz) (hordR z hz) (hdeep z hz)
+  have hE :
+      (P.L T) ^ 2 - zetaNaturalCompressionTail P T z.1 ≤
+        finiteImaginaryEnergy P T (Zeta23.gammaOf (z : Complex)) := by
+    simpa using
+      zeta_zero_left_half_deep_interior_finiteImaginaryEnergy_lower
+        P T hP hwL z.1 hT (hre z hz) (hordL z hz) (hordR z hz) (hdeep z hz)
   have hhalf :
       (P.L T) ^ 2 / 2 ≤
         finiteImaginaryEnergy P T (Zeta23.gammaOf (z : Complex)) := by
-    linarith [htail z hz]
+    linarith [hE, htail z hz]
   exact mul_le_mul_of_nonneg_left hhalf (by positivity)
 
 end
