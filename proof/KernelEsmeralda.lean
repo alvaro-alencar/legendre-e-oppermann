@@ -94,6 +94,7 @@ import KernelEsmeralda.ImaginaryEnergyRaySum
 import KernelEsmeralda.ImaginaryCompressionBound
 import KernelEsmeralda.GammaOfGeometry
 import KernelEsmeralda.ImaginaryCompressionZetaEnvelope
+import KernelEsmeralda.ImaginaryCompressionNaturalScale
 import KernelEsmeralda.OffLineComplexEnergy
 import KernelEsmeralda.ClaudeTwoThirdsBridge
 import KernelEsmeralda.ClaudeOffLineCount
