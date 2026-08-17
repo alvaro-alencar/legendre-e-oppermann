@@ -58,6 +58,7 @@ theorem zeta_zero_left_half_complex_energy_lower
     rw [zeta23_gammaOf_im_eq_half_sub_re]
     ring
   rw [hyid] at hmul
+  rw [hyid]
   exact hmul
 
 /-- The same lower bound is the actual sum of the nonnegative lattice energy,
