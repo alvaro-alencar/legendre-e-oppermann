@@ -1,0 +1,125 @@
+import KernelEsmeralda.PrimePowerWindow
+import KernelEsmeralda.LegendreCriterion
+
+open scoped BigOperators
+
+namespace KernelEsmeralda
+
+noncomputable section
+
+theorem upperSquare_rpow_half (n : Nat) :
+    upperSquare n ^ (1 / (2 : Real)) = (((n + 1 : Nat) : Real)) := by
+  rw [← Real.sqrt_eq_rpow, upperSquare]
+  simpa using Real.sqrt_sq (show 0 ≤ (((n + 1 : Nat) : Real)) by positivity)
+
+theorem lowerSquare_rpow_half (n : Nat) :
+    lowerSquare n ^ (1 / (2 : Real)) = (n : Real) := by
+  rw [← Real.sqrt_eq_rpow, lowerSquare]
+  simpa using Real.sqrt_sq (show 0 ≤ (n : Real) by positivity)
+
+theorem psi_nat_succ_sub_eq_vonMangoldt (n : Nat) :
+    Chebyshev.psi (((n + 1 : Nat) : Real)) - Chebyshev.psi (n : Real) =
+      ArithmeticFunction.vonMangoldt (n + 1) := by
+  simp only [Chebyshev.psi, Nat.floor_natCast]
+  rw [Finset.sum_Ioc_succ_top (Nat.zero_le n)]
+  ring
+
+theorem psi_nat_succ_sub_le_log (n : Nat) :
+    Chebyshev.psi (((n + 1 : Nat) : Real)) - Chebyshev.psi (n : Real) ≤
+      Real.log (((n + 1 : Nat) : Real)) := by
+  rw [psi_nat_succ_sub_eq_vonMangoldt]
+  exact ArithmeticFunction.vonMangoldt_le_log
+
+theorem deltaPsi_eq_vonMangoldt_window (n : Nat) :
+    deltaPsi n =
+      ∑ m ∈ Finset.Ioc (n ^ 2) ((n + 1) ^ 2),
+        ArithmeticFunction.vonMangoldt m := by
+  have hl : ⌊lowerSquare n⌋₊ = n ^ 2 := by
+    rw [lowerSquare, ← Nat.cast_pow, Nat.floor_natCast]
+  have hu : ⌊upperSquare n⌋₊ = (n + 1) ^ 2 := by
+    rw [upperSquare, ← Nat.cast_pow, Nat.floor_natCast]
+  have hsq : n ^ 2 ≤ (n + 1) ^ 2 := by
+    simpa [pow_two] using
+      Nat.mul_le_mul (Nat.le_succ n) (Nat.le_succ n)
+  have hsum := Finset.sum_Ioc_consecutive
+    (fun m : Nat => ArithmeticFunction.vonMangoldt m)
+    (Nat.zero_le (n ^ 2)) hsq
+  unfold deltaPsi Chebyshev.psi
+  rw [hu, hl]
+  linarith
+
+/-- Massa de von Mangoldt suavizada por um peso logarítmico dentro da janela de Legendre. -/
+def emeraldMass (K : Real → Real) (n : Nat) : Real :=
+  ∑ m ∈ Finset.Ioc (n ^ 2) ((n + 1) ^ 2),
+    ArithmeticFunction.vonMangoldt m * K (Real.log m)
+
+/-- Qualquer peso limitado superiormente por `1` produz massa no máximo igual a `Δψ`. -/
+theorem emeraldMass_le_deltaPsi
+    (K : Real → Real)
+    (hK : ∀ u : Real, K u ≤ 1)
+    (n : Nat) :
+    emeraldMass K n ≤ deltaPsi n := by
+  rw [deltaPsi_eq_vonMangoldt_window]
+  unfold emeraldMass
+  apply Finset.sum_le_sum
+  intro m hm
+  have hΛ : 0 ≤ ArithmeticFunction.vonMangoldt m :=
+    ArithmeticFunction.vonMangoldt_nonneg
+  simpa using mul_le_mul_of_nonneg_left (hK (Real.log m)) hΛ
+
+theorem remainderDelta_le_costa_window_sqrt (n : Nat) :
+    higherPowerRemainder (upperSquare n) - higherPowerRemainder (lowerSquare n) <=
+      (Chebyshev.psi (((n + 1 : Nat) : Real)) - Chebyshev.psi (n : Real)) +
+      Chebyshev.psi (upperSquare n ^ (1 / (3 : Real))) +
+      Chebyshev.psi (upperSquare n ^ (1 / (5 : Real))) := by
+  rw [← upperSquare_rpow_half n, ← lowerSquare_rpow_half n]
+  exact remainderDelta_le_costa_window n
+
+theorem remainderDelta_le_log_add_roots (n : Nat) :
+    higherPowerRemainder (upperSquare n) - higherPowerRemainder (lowerSquare n) <=
+      Real.log (((n + 1 : Nat) : Real)) +
+      Chebyshev.psi (upperSquare n ^ (1 / (3 : Real))) +
+      Chebyshev.psi (upperSquare n ^ (1 / (5 : Real))) := by
+  linarith [remainderDelta_le_costa_window_sqrt n, psi_nat_succ_sub_le_log n]
+
+theorem remainderDelta_le_explicit_roots (n : Nat) :
+    higherPowerRemainder (upperSquare n) - higherPowerRemainder (lowerSquare n) <=
+      Real.log (((n + 1 : Nat) : Real)) +
+      (Real.log 4 + 4) * (upperSquare n ^ (1 / (3 : Real))) +
+      (Real.log 4 + 4) * (upperSquare n ^ (1 / (5 : Real))) := by
+  have hu : 0 ≤ upperSquare n := by
+    unfold upperSquare
+    exact sq_nonneg _
+  have h3 := Chebyshev.psi_le_const_mul_self
+    (x := upperSquare n ^ (1 / (3 : Real))) (Real.rpow_nonneg hu _)
+  have h5 := Chebyshev.psi_le_const_mul_self
+    (x := upperSquare n ^ (1 / (5 : Real))) (Real.rpow_nonneg hu _)
+  linarith [remainderDelta_le_log_add_roots n, h3, h5]
+
+theorem legendre_of_deltaPsi_gt_explicit_roots
+    (n : Nat)
+    (hdom :
+      Real.log (((n + 1 : Nat) : Real)) +
+          (Real.log 4 + 4) * (upperSquare n ^ (1 / (3 : Real))) +
+          (Real.log 4 + 4) * (upperSquare n ^ (1 / (5 : Real))) <
+        deltaPsi n) :
+    ∃ p : Nat, Nat.Prime p ∧ n ^ 2 < p ∧ p < (n + 1) ^ 2 := by
+  apply legendre_of_deltaPsi_gt_remainderDelta n
+  exact lt_of_le_of_lt (remainderDelta_le_explicit_roots n) hdom
+
+/-- Critério de Legendre formulado diretamente em termos da massa esmeralda. -/
+theorem legendre_of_emeraldMass_gt_explicit_roots
+    (K : Real → Real)
+    (hK : ∀ u : Real, K u ≤ 1)
+    (n : Nat)
+    (hmass :
+      Real.log (((n + 1 : Nat) : Real)) +
+          (Real.log 4 + 4) * (upperSquare n ^ (1 / (3 : Real))) +
+          (Real.log 4 + 4) * (upperSquare n ^ (1 / (5 : Real))) <
+        emeraldMass K n) :
+    ∃ p : Nat, Nat.Prime p ∧ n ^ 2 < p ∧ p < (n + 1) ^ 2 := by
+  apply legendre_of_deltaPsi_gt_explicit_roots n
+  exact lt_of_lt_of_le hmass (emeraldMass_le_deltaPsi K hK n)
+
+end
+end KernelEsmeralda

@@ -1,47 +1,38 @@
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/alvaro-alencar/legendre-e-oppermann/blob/main/Analise_Primos_Legendre.ipynb)
-# 🧪 Math Lab: Validação Numérica de Conjecturas de Primos
+# 🧪 Math Lab: Legendre e Oppermann
 
-Este projeto é um laboratório computacional desenvolvido para testar a robustez de conjecturas clássicas da Teoria dos Números utilizando Python de alta performance.
+Laboratório numérico e formalização parcial das conjecturas de Legendre e Oppermann.
 
-O objetivo principal foi validar a **Conjectura de Legendre** e a **Conjectura de Oppermann** até $n = 1.000.000$, cruzando contagens reais de números primos com predições analíticas baseadas nos Zeros Não-Triviais da Função Zeta de Riemann.
+## Status científico
 
-## 🎯 O Que Foi Testado?
+Este repositório não declara uma prova das conjecturas. A configuração padrão usa `N_STEP = 10_000`, portanto o scan é amostral. Para percorrer todos os inteiros do intervalo configurado, use `N_STEP = 1`.
 
-1.  **Conjectura de Legendre:** Existe sempre um número primo entre $n^2$ e $(n+1)^2$?
-2.  **Conjectura de Oppermann:** A distribuição dos primos é simétrica? Ou seja, existem primos tanto na metade inferior $[n^2, n(n+1)]$ quanto na superior $[n(n+1), (n+1)^2]$?
+## Implementação corrigida
 
-## 📊 Resultados Visuais
+Os dois pontos de entrada numéricos são:
 
-A validação foi bem sucedida para 100% dos casos no intervalo testado.
+- `Analise_Primos_Legendre.py`
+- `Analise_Primos_Legendre.ipynb`
 
-### Visão Geral da Distribuição e Erro
-![Overview dos Resultados](overview.png)
-*O gráfico "Real vs Predito" (canto inferior direito) demonstra a precisão da Fórmula Explícita de Riemann ao prever a contagem de primos.*
+O notebook foi regenerado para refletir a fórmula explícita corrigida e a distinção entre scan amostral e exaustivo.
 
-### Análise de Simetria e Estabilidade
-![Análise Log-Log](analysis.png)
-*A análise Log-Log sugere que o erro cresce de forma controlada ($\alpha < 0.5$), consistente com a Hipótese de Riemann.*
+Para `rho = 1/2 + i gamma`, a contribuição `Re(x^rho / rho)` usa o denominador correto `0.25 + gamma^2`. A versão anterior dividia pela raiz dessa quantidade.
 
-## 🛠️ Stack Tecnológico
+O preditor continua sendo truncado e condicionado à linha crítica, pois representa os zeros como `rho = 1/2 + i gamma`. Portanto, ele não é um teste independente da Hipótese de Riemann. A conversão `Delta psi / log x` em quantidade prevista de primos também é heurística, porque `psi` inclui potências de primos.
 
-Este projeto foi desenvolvido com foco em "Vibe Coding" (eficiência e prototipagem rápida) mas com rigor matemático:
+## Kernel de Esmeralda em Lean
 
-* **Python 3.10+**
-* **Numba (JIT):** Para compilação *Just-In-Time* das funções de soma sobre os zeros da Zeta (velocidade próxima de C).
-* **SymPy:** Para a função `primepi` (contagem exata de primos - "Ground Truth").
-* **Mpmath:** Para cálculo de alta precisão dos zeros da função Zeta.
-* **Matplotlib:** Visualização de dados.
+A pasta `proof/` inicia a formalização incremental.
 
-## 🚀 Como Executar
+O módulo `proof/KernelEsmeralda/Detection.lean` contém o teorema `clean_detection`: se uma quantidade `deltaPsi` se decompõe exatamente em massa de primos mais massa de potências superiores, e `deltaPsi` domina toda a contribuição das potências superiores, então existe um primo entre `n²` e `(n+1)²`.
 
-Este projeto foi otimizado para rodar no Google Colab.
+Isso corrige a passagem inválida de `Delta psi > 0` diretamente para a existência de primo.
 
-1.  Abra o arquivo `.ipynb` neste repositório.
-2.  Clique no botão "Open in Colab".
-3.  Execute as células sequencialmente.
-    * *Nota: O script calcula automaticamente os zeros da Zeta na primeira execução e cria um cache local.*
+A próxima etapa é ligar essa decomposição abstrata à diferença real da função de Chebyshev e depois formalizar o controle espectral do Kernel de Esmeralda.
 
-## 👨‍💻 Autor
+## Resultados históricos
 
-**Álvaro Alencar**
-*Fundador da Vortex Development | Curador de IA*
+`overview.png` e `analysis.png` pertencem à rodada anterior à correção. O script corrigido gera novos gráficos com sufixo `_corrected`.
+
+## Autor
+
+Álvaro Alencar
