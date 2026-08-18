@@ -32,8 +32,8 @@ theorem complexBilinearTerm_summable
     (hP : P.Valid) (hwL : 8 * P.w ≤ P.L T)
     (z w : ℂ) :
     Summable (complexBilinearTerm P T z w) := by
-  have h := zeta23ComplexPoisson_bilinear P T hP hwL z w
-  simpa [complexBilinearTerm, sampleValue, poissonBilinearRHS] using h.summable
+  have h := zeta23ComplexPoissonTarget_proved P T hP hwL z w
+  simpa [complexBilinearTerm] using h.summable
 
 /-- Exact finite-plus-tail bilinear Poisson identity. -/
 theorem finiteComplexBilinearSum_add_tail_eq_poisson
@@ -44,7 +44,7 @@ theorem finiteComplexBilinearSum_add_tail_eq_poisson
         (∑' k : ↑((finiteGridIndexSet P T : Set ℤ)ᶜ),
           complexBilinearTerm P T z w k) =
       (P.L T : ℂ) * P.Phi T (z - w) := by
-  have hsum := zeta23ComplexPoisson_bilinear P T hP hwL z w
+  have hsum := zeta23ComplexPoissonTarget_proved P T hP hwL z w
   have hsumm := complexBilinearTerm_summable P T hP hwL z w
   let s : Finset ℤ := finiteGridIndexSet P T
   have hsplit := hsumm.sum_add_tsum_compl (s := s)
@@ -58,7 +58,7 @@ theorem finiteComplexBilinearSum_add_tail_eq_poisson
               rfl
     _ = ∑' k : ℤ, complexBilinearTerm P T z w k := hsplit
     _ = (P.L T : ℂ) * P.Phi T (z - w) := by
-      simpa [complexBilinearTerm, sampleValue, poissonBilinearRHS] using hsum.tsum_eq
+      simpa [complexBilinearTerm] using hsum.tsum_eq
 
 /-- The bilinear compression error is the negative of the two omitted rays. -/
 theorem finiteComplexBilinear_error_eq_neg_two_rays
@@ -94,7 +94,7 @@ theorem two_mul_norm_complexBilinearTerm_le_squareNorm_add
       ‖P.phiHat T (w - (P.tau T k : ℂ))‖)]
 
 /-- Summability of the bilinear norm on the omitted negative ray follows from
-the two square-norm tails. -/
+ the two square-norm tails. -/
 theorem summable_negative_ray_complexBilinearNorm
     (P : Zeta23.Params) (T D : ℝ)
     (hP : P.Valid) (hwL : 8 * P.w ≤ P.L T)
